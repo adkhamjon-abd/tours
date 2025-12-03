@@ -27,7 +27,7 @@ public class TourController {
     @GetMapping("/{id}")
     public String getById(@PathVariable("id") int id){
         Tour tour = tourRepository.findById(id);
-        return "Company Name: " + tour.getName() + " The view count is: " + tour.getViewCount();
+        return "Tour Name: " + tour.getName() + " The view count is: " + tour.getViewCount();
     }
 
     @GetMapping
