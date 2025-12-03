@@ -47,5 +47,9 @@ public class UserRepository {
         return result;
     }
 
+    public User findById(int id){
+        return users.get(id);
+    }
+
 
 }
