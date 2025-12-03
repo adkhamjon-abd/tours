@@ -3,8 +3,6 @@ package org.example.controller;
 import org.example.model.Tour;
 import org.example.repository.CompanyRepository;
 import org.example.repository.TourRepository;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,8 +25,9 @@ public class TourController {
     }
 
     @GetMapping("/{id}")
-    public String getById(@PathVariable int id){
-        return "Company Name: " + tourRepository.findById(id).getName();
+    public String getById(@PathVariable("id") int id){
+        Tour tour = tourRepository.findById(id);
+        return "Company Name: " + tour.getName() + " The view count is: " + tour.getViewCount();
     }
 
     @GetMapping
