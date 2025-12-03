@@ -43,4 +43,8 @@ public class UserController {
     public String getAll(){
         return userRepository.findAll();
     }
+    // get UserId using token
+    public Integer getUserIdFromToken(String token) {
+        return sessions.get(token);
+    }
 }
