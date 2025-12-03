@@ -1,6 +1,7 @@
 package org.example.repository;
 
 import org.example.model.Tour;
+import org.example.model.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -41,7 +42,16 @@ public class TourRepository {
                 .collect(Collectors.toList());
     }
 
-    public List<Tour> findAll(){
-        return new ArrayList<>(tours.values());
+    public String findAll(){
+        //return new ArrayList<>(tours.values());
+        String result = "";
+        for (Tour tour : tours.values()) {
+            String tourName = tour.getName();
+
+
+            // Corrected concatenation and newline handling
+            result += " TourName: " + tourName + "\n";
+        }
+        return result;
     }
 }
