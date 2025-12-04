@@ -37,4 +37,14 @@ public class BookingController {
     public List<Booking> getBooking(@PathVariable("id") int id) {
         return bookingService.getBooking(id);
     }
+
+    @GetMapping("/users/{id}")
+    public List<Booking> getBookingsByUserId(@PathVariable("id") int id) {
+        return bookingService.getBookingByUserId(id);
+    }
+
+    @GetMapping
+    public List<Booking> getAllBookings() {
+        return bookingService.getAllBookings();
+    }
 }

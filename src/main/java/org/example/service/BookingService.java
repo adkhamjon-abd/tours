@@ -49,4 +49,12 @@ public class BookingService {
     public List<Booking> getBooking(int id) {
         return bookingRepository.findById(id);
     }
+
+    public List<Booking> getBookingByUserId(int id) {
+        return bookingRepository.findByUserId(id);
+    }
+
+    public List<Booking> getAllBookings() {
+        return bookingRepository.findAll();
+    }
 }
