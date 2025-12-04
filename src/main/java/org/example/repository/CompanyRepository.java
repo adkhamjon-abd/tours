@@ -3,7 +3,9 @@ package org.example.repository;
 import org.example.model.Company;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -30,4 +32,7 @@ public class CompanyRepository {
         return companies.get(id);
     }
 
+    public List<Company> findAll() {
+        return new ArrayList<>(companies.values());
+    }
 }

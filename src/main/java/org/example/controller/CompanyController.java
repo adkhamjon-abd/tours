@@ -5,6 +5,8 @@
     import org.example.service.CompanyService;
     import org.springframework.web.bind.annotation.*;
 
+    import java.util.List;
+
     @RestController()
     @RequestMapping("/companies")
     public class CompanyController {
@@ -27,6 +29,8 @@
             return companyService.createCompany(company);
         }
 
-
-
+        @GetMapping()
+        public List<Company> getAll(){
+            return companyService.getAllCompanies();
+        }
     }

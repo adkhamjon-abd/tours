@@ -4,6 +4,8 @@ import org.example.model.Company;
 import org.example.repository.CompanyRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CompanyService {
 
@@ -26,4 +28,9 @@ public class CompanyService {
     public String createCompany(Company company) {
         return companyRepository.save(company);
     }
+
+    public List<Company> getAllCompanies() {
+        return companyRepository.findAll();
+    }
+
 }
