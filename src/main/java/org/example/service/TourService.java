@@ -31,4 +31,8 @@ public class TourService {
     public String getAll() {
         return tourRepository.findAll().toString();
     }
+
+    public String deleteTour(int id) {
+        return tourRepository.deleteTourById(id);
+    }
 }

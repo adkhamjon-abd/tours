@@ -54,4 +54,9 @@ public class TourRepository {
         }
         return result;
     }
+
+    public String deleteTourById(int id) {
+        tours.entrySet().removeIf(entry -> entry.getValue().getId() == id);
+        return "Tour Deleted";
+    }
 }

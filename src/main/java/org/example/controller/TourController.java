@@ -31,4 +31,9 @@ public class TourController {
     public String getAll(){
         return tourService.getAll();
     }
+
+    @DeleteMapping("/{id}")
+    public String deleteTour(@PathVariable("id") int id){
+        return tourService.deleteTour(id);
+    }
 }
