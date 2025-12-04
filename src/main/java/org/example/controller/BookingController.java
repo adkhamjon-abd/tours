@@ -47,4 +47,9 @@ public class BookingController {
     public List<Booking> getAllBookings() {
         return bookingService.getAllBookings();
     }
+
+    @DeleteMapping("/{id}")
+    public String deleteBooking(@PathVariable("id") int id) {
+        return bookingService.deleteBooking(id);
+    }
 }

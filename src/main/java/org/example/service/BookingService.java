@@ -57,4 +57,8 @@ public class BookingService {
     public List<Booking> getAllBookings() {
         return bookingRepository.findAll();
     }
+
+    public String deleteBooking(int id) {
+        return bookingRepository.deleteById(id);
+    }
 }

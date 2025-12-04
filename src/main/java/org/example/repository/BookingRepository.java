@@ -62,5 +62,10 @@ public class BookingRepository {
         idBookings.addAll(bookings.values());
         return idBookings;
     }
+
+    public String deleteById(int id) {
+        bookings.entrySet().removeIf(entry -> entry.getValue().getId() == id);
+        return "Deleted";
+    }
 }
 
