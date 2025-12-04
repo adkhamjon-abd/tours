@@ -1,35 +1,28 @@
 package org.example.controller;
 
 import org.example.model.User;
-import org.example.repository.UserRepository;
+import org.example.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    private final Map<String, Integer> sessions = new HashMap<>();
-
-    public UserController(UserRepository userRepository){
-        this.userRepository = userRepository;
+    public UserController(UserService userService){
+        this.userService =  userService;
     }
 
     @PostMapping("/register")
     public String createUser(@RequestBody User user){
-        return userRepository.save(user);
+        return userService.createUser(user);
     };
 
     @GetMapping
     public String getAll(){
-        return userRepository.findAll();
+        return userService.getAll();
     }
-    // get UserId using token
-    public Integer getUserIdFromToken(String token) {
-        return sessions.get(token);
-    }
+
 }
