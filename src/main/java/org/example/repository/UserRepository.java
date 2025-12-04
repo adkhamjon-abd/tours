@@ -2,6 +2,8 @@ package org.example.repository;
 
 import org.example.model.User;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
@@ -52,4 +54,8 @@ public class UserRepository {
     }
 
 
+    public String deleteById(int id) {
+        users.entrySet().removeIf(entry -> entry.getValue().getId() == id);
+        return "User Deleted";
+    }
 }
