@@ -18,7 +18,7 @@ public class Booking {
     public void setId(int id) { this.id = id; }
 
     public int getUserId() { return userId; }
-    public void setUserId(int tourId) { this.userId = tourId; }
+    public void setUserId(int userId) { this.userId = userId; }
 
     public int getTourId() { return tourId; }
     public void setTourId(int tourId) { this.tourId = tourId; }

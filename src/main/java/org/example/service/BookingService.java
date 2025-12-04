@@ -18,7 +18,7 @@ public class BookingService {
                           TourRepository tourRepository) {
         this.bookingRepository = bookingRepository;
         this.userRepository = userRepository;
-        this.tourRepository =  tourRepository;
+        this.tourRepository = tourRepository;
     }
 
 
@@ -26,14 +26,19 @@ public class BookingService {
 
         Integer userId = userRepository.findById(booking.getUserId()).getId();
 
-        if (userId == null){
+        if (userId == null) {
             return "No such user with this id";
         }
 
-        if (tourRepository.findById(booking.getTourId()) == null){
+        if (tourRepository.findById(booking.getTourId()) == null) {
             return "Tour with such id does not exist";
         }
-        bookingRepository.save(booking);
+
+        String result = bookingRepository.save(booking);
+
+        if (result.startsWith("The User has already booked")) {
+            return result;
+        }
 
         return "Booking was successful for tour " + tourRepository.findById(booking.getTourId()).getName() + " with id: "
                 + booking.getTourId() + ". The Person who booked is: " + userRepository.findById(booking.getUserId()).getUsername();
