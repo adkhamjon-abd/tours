@@ -4,7 +4,9 @@ import org.example.model.Booking;
 import org.example.model.User;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -33,6 +35,16 @@ public class BookingRepository {
         bookings.put(nextId, booking);
         nextId++;
         return "Booking: " + booking.getId() + " for UserName: " + userRepository.findById(booking.getUserId()).getUsername();
+    }
+
+    public List<Booking> findById(int id) {
+        List<Booking> idBookings = new ArrayList<>();
+        for(Booking current : bookings.values()){
+            if (current.getId() == id){
+                idBookings.add(current);
+            }
+        }
+        return idBookings;
     }
 }
 

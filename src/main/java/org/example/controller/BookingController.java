@@ -7,6 +7,8 @@ import org.example.repository.UserRepository;
 import org.example.service.BookingService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/bookings")
 public class BookingController {
@@ -29,5 +31,10 @@ public class BookingController {
     @PostMapping("/book")
     public String createBooking(@RequestBody Booking booking){
         return bookingService.createBooking(booking);
+    }
+
+    @GetMapping("/{id}")
+    public List<Booking> getBooking(@PathVariable("id") int id) {
+        return bookingService.getBooking(id);
     }
 }

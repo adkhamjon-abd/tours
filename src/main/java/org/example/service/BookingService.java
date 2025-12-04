@@ -6,6 +6,8 @@ import org.example.repository.TourRepository;
 import org.example.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class BookingService {
 
@@ -42,5 +44,9 @@ public class BookingService {
 
         return "Booking was successful for tour " + tourRepository.findById(booking.getTourId()).getName() + " with id: "
                 + booking.getTourId() + ". The Person who booked is: " + userRepository.findById(booking.getUserId()).getUsername();
+    }
+
+    public List<Booking> getBooking(int id) {
+        return bookingRepository.findById(id);
     }
 }
