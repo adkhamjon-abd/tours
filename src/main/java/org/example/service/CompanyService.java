@@ -33,4 +33,7 @@ public class CompanyService {
         return companyRepository.findAll();
     }
 
+    public String deleteCompany(int id) {
+        return companyRepository.deleteById(id);
+    }
 }

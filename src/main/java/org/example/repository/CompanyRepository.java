@@ -35,4 +35,9 @@ public class CompanyRepository {
     public List<Company> findAll() {
         return new ArrayList<>(companies.values());
     }
+
+    public String deleteById(int id) {
+        companies.entrySet().removeIf(entry -> entry.getValue().getId() == id);
+        return "Company deleted";
+    }
 }

@@ -33,4 +33,9 @@
         public List<Company> getAll(){
             return companyService.getAllCompanies();
         }
+
+        @DeleteMapping("/{id}")
+        public String deleteCompany(@PathVariable("id") int id){
+            return companyService.deleteCompany(id);
+        }
     }
