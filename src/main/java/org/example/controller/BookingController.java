@@ -1,7 +1,6 @@
 package org.example.controller;
 
 import org.example.model.Booking;
-import org.example.model.User;
 import org.example.repository.BookingRepository;
 import org.example.repository.TourRepository;
 import org.example.repository.UserRepository;
@@ -12,37 +11,32 @@ import org.springframework.web.bind.annotation.*;
 public class BookingController {
 
     private final BookingRepository bookingRepository;
-    private final UserController userController;
+    private final UserRepository userRepository;
     private final TourRepository tourRepository;
 
     public BookingController(BookingRepository bookingRepository,
-                             UserController userController,
+                             UserRepository userRepository,
                              TourRepository tourRepository){
         this.bookingRepository = bookingRepository;
-        this.userController = userController;
+        this.userRepository = userRepository;
         this.tourRepository = tourRepository;
     }
 
-    @PostMapping("book/{tourId}")
-    public String creatBooking(@RequestHeader("Authorization") String token,
-                               @PathVariable("tourId") int tourId){
+    @PostMapping("/book")
+    public String creatBooking(@RequestBody Booking booking){
 
-        Integer userId = userController.getUserIdFromToken(token);
+        Integer userId = userRepository.findById(booking.getUserId()).getId();
 
         if (userId == null){
-            return "No token";
+            return "No such user with this id";
         }
 
-        if (tourRepository.findById(tourId) == null){
+        if (tourRepository.findById(booking.getTourId()) == null){
             return "Tour with such id does not exist";
         }
-
-        Booking booking = new Booking();
-        booking.setUserId(userId);
-        booking.setTourId(tourId);
         bookingRepository.save(booking);
 
-        return "Booking was successful for tour " + tourRepository.findById(tourId).getName() + " with id: "
-                + tourId;
+        return "Booking was successful for tour " + tourRepository.findById(booking.getTourId()).getName() + " with id: "
+                + booking.getTourId() + ". The Person who booked is: " + userRepository.findById(booking.getUserId()).getUsername();
     }
 }

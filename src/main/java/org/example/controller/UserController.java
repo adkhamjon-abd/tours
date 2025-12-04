@@ -19,21 +19,6 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-    @PostMapping("/login")
-    public Map<String, String> login(@RequestBody User login){
-        User user = userRepository.findByUsername(login.getUsername());
-        Map<String, String> response = new HashMap<>();
-
-        if (user != null && user.getPassword().equals(login.getPassword())){
-            String token = "token" + user.getId();
-            sessions.put(token, user.getId());
-            response.put("token", token);
-        }else {
-            response.put("error", "Invalid username data");
-        }
-        return response;
-    }
-
     @PostMapping("/register")
     public String createUser(@RequestBody User user){
         return userRepository.save(user);
