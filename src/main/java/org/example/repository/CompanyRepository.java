@@ -12,7 +12,6 @@ import java.util.Map;
 public class CompanyRepository {
 
     private final Map<Integer, Company> companies = new HashMap<>();
-    private int nextId = 6;
 
     public CompanyRepository(){
         companies.put(1, new Company(1, "Green Travel"));
@@ -22,9 +21,9 @@ public class CompanyRepository {
         companies.put(5, new Company(5, "Afsona Travel"));
     }
     public String save(Company company){
-        company.setId(nextId);
-        companies.put(nextId, company);
-        nextId++;
+        int id = companies.size();
+        company.setId(id);
+        companies.put(id, company);
         return "Company: " + company.getName() + " created";
     }
 

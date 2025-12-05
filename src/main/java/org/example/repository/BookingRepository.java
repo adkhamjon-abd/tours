@@ -15,7 +15,6 @@ public class BookingRepository {
     private final UserRepository userRepository;
 
     private final Map<Integer, Booking> bookings = new HashMap<>();
-    int nextId = 2;
 
     public BookingRepository(UserRepository userRepository){
         bookings.put(1, new Booking(1, 1, 1));
@@ -31,9 +30,9 @@ public class BookingRepository {
                 return "The User has already booked this tour";
             }
         }
-        booking.setId(nextId);
-        bookings.put(nextId, booking);
-        nextId++;
+        int id = bookings.size();
+        booking.setId(id);
+        bookings.put(id, booking);
         return "Booking: " + booking.getId() + " for UserName: " + userRepository.findById(booking.getUserId()).getUsername();
     }
 

@@ -12,7 +12,6 @@ import java.util.Map;
 @Repository
 public class UserRepository {
     private Map<Integer, User> users = new HashMap<>();
-    private int nextId = 1;
     public UserRepository(){
         save(new User(0, "admin", "admin"));
     }
@@ -23,9 +22,9 @@ public class UserRepository {
                 return "Username already exists. Please choose another.";
             }
         }
-        user.setId(nextId);
-        users.put(nextId, user);
-        nextId++;
+        int id = users.size();
+        user.setId(id);
+        users.put(id, user);
         return "User: " + user.getUsername() + " created with id: " + user.getId();
     }
 

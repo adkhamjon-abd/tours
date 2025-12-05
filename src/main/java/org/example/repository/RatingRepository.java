@@ -19,10 +19,10 @@ public class RatingRepository {
     private final UserRepository userRepository;
     public RatingRepository(TourRepository tourRepository, UserRepository userRepository) {
         ratings.put(1, new Rating(1, 1, 1, 4));
-        ratings.put(2, new Rating(1, 2, 1, 3));
-        ratings.put(3, new Rating(1, 3, 1, 4));
-        ratings.put(4, new Rating(1, 4, 1, 5));
-        ratings.put(5, new Rating(1, 5, 1, 5));
+        ratings.put(2, new Rating(2, 2, 1, 3));
+        ratings.put(3, new Rating(3, 3, 1, 4));
+        ratings.put(4, new Rating(4, 4, 1, 5));
+        ratings.put(5, new Rating(5, 5, 1, 5));
 
         this.tourRepository = tourRepository;
         this.userRepository = userRepository;
@@ -39,9 +39,9 @@ public class RatingRepository {
                 return "Score has changed to " + value.getScore();
             }
         }
-        rating.setId(nextId);
-        ratings.put(nextId, rating);
-        nextId++;
+        int id = ratings.size();
+        rating.setId(id);
+        ratings.put(id, rating);
         return "Rating score of " + rating.getScore() + " got created";
     }
 

@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 @Repository
 public class TourRepository {
     private final Map<Integer, Tour> tours = new HashMap<>();
-    private int nextId = 6;
 
     public TourRepository() {
         tours.put(1, new Tour(1, "Dubai", 1, 0));
@@ -24,9 +23,9 @@ public class TourRepository {
     }
 
     public String save(Tour tour){
-        tour.setId(nextId);
-        tours.put(nextId, tour);
-        nextId++;
+        int id = tours.size() + 1;
+        tour.setId(id);
+        tours.put(id, tour);
         return "Tour: " + tour.getName() + " created for Company with id" + tour.getCompanyId();
     }
 
