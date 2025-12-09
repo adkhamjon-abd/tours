@@ -44,6 +44,7 @@ public class CompanyService {
         }
 
         existingCompany.setName(updateCompany.getName());
+        companyRepository.update(existingCompany);
         return existingCompany;
 
     }
