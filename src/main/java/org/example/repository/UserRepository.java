@@ -2,18 +2,16 @@ package org.example.repository;
 
 import org.example.model.User;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.util.HashMap;
 import java.util.Map;
 
 @Repository
 public class UserRepository {
     private Map<Integer, User> users = new HashMap<>();
+    private int nextId = 2;
+
     public UserRepository(){
-        save(new User(0, "admin", "admin"));
+        users.put(1, new User(1, "admin", "admin"));
     }
 
     public String save(User user){
@@ -22,9 +20,8 @@ public class UserRepository {
                 return "Username already exists. Please choose another.";
             }
         }
-        int id = users.size();
-        user.setId(id);
-        users.put(id, user);
+        user.setId(nextId++);
+        users.put(user.getId(), user);
         return "User: " + user.getUsername() + " created with id: " + user.getId();
     }
 
@@ -49,7 +46,11 @@ public class UserRepository {
     }
 
     public User findById(int id){
-        return users.get(id);
+        User user = users.get(id);
+        if (user == null) {
+            return null;
+        }
+        return user;
     }
 
 
