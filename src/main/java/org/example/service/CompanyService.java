@@ -36,4 +36,15 @@ public class CompanyService {
     public String deleteCompany(int id) {
         return companyRepository.deleteById(id);
     }
+
+    public Company updateCompany(int id, Company updateCompany) {
+        Company existingCompany = companyRepository.findById(id);
+        if (existingCompany == null){
+            return null;
+        }
+
+        existingCompany.setName(updateCompany.getName());
+        return existingCompany;
+
+    }
 }

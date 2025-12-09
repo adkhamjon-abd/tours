@@ -3,6 +3,7 @@
     import org.example.model.Company;
     import org.example.repository.CompanyRepository;
     import org.example.service.CompanyService;
+    import org.springframework.http.ResponseEntity;
     import org.springframework.web.bind.annotation.*;
 
     import java.util.List;
@@ -37,5 +38,18 @@
         @DeleteMapping("/{id}")
         public String deleteCompany(@PathVariable("id") int id){
             return companyService.deleteCompany(id);
+        }
+
+        @PutMapping("/{id}")
+        public ResponseEntity<Company> updateCompany(
+                @PathVariable("id") int id,
+                @RequestBody Company updateCompany) {
+            Company company = companyService.updateCompany(id, updateCompany);
+
+            if (company == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            return ResponseEntity.ok(company);
         }
     }
