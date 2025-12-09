@@ -2,6 +2,8 @@ package org.example.controller;
 
 import org.example.model.User;
 import org.example.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -33,4 +35,15 @@ public class UserController {
     @GetMapping("/{id}")
     public User getById(@PathVariable("id") int id) { return userService.getById(id);}
 
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(
+            @PathVariable("id") int id,
+            @RequestBody User user
+    ) {
+        User updated = userService.updateUser(id, user);
+        if (updated == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(updated);
+    }
 }

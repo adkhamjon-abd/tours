@@ -29,4 +29,17 @@ public class UserService {
     public User getById(int id) {
         return userRepository.findById(id);
     }
+
+    public User updateUser(int id, User user) {
+        User existingUser = userRepository.findById(id);
+
+        if (existingUser == null) {
+            return null;
+        }
+
+        existingUser.setUsername(user.getUsername());
+        existingUser.setPassword(user.getPassword());
+        userRepository.save(existingUser);
+        return existingUser;
+    }
 }
