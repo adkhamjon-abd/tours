@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.example.model.Rating;
 import org.example.model.Tour;
 import org.example.model.User;
+import org.springframework.aop.framework.adapter.AfterReturningAdviceInterceptor;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -39,9 +40,8 @@ public class RatingRepository {
                 return "Score has changed to " + value.getScore();
             }
         }
-        int id = ratings.size();
-        rating.setId(id);
-        ratings.put(id, rating);
+        rating.setId(nextId++);
+        ratings.put(nextId, rating);
         return "Rating score of " + rating.getScore() + " got created";
     }
 
@@ -72,5 +72,13 @@ public class RatingRepository {
         double avarege = totalScore / numberOfScores;
 
         return String.valueOf(avarege);
+    }
+
+    public Rating findById(int id) {
+        return ratings.values().stream()
+                .filter(r -> r.getId() == id)
+                .findFirst()
+                .orElse(null);
+
     }
 }

@@ -25,4 +25,8 @@ public class RatingService {
     public String getRatingByTourId(int id) {
         return ratingRepository.fingAverageRatingByTourId(id);
     }
+
+    public Rating getRatingById(int id) {
+        return ratingRepository.findById(id);
+    }
 }

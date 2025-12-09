@@ -25,9 +25,13 @@ public class RatingController {
         return ratingService.getAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/tours/{id}")
     public String getRatingByTourId(@PathVariable("id") int id){
         return ratingService.getRatingByTourId(id);
     }
 
+    @GetMapping("/{id}")
+    public Rating getByRatingId(@PathVariable("id") int id) {
+        return ratingService.getRatingById(id);
+    }
 }
