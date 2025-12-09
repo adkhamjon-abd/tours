@@ -4,6 +4,8 @@ import org.example.model.Tour;
 import org.example.repository.CompanyRepository;
 import org.example.repository.TourRepository;
 import org.example.service.TourService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -35,5 +37,17 @@ public class TourController {
     @DeleteMapping("/{id}")
     public String deleteTour(@PathVariable("id") int id){
         return tourService.deleteTour(id);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Tour> updateTour(
+            @PathVariable("id") int id,
+            @RequestBody Tour updateTour
+    ) {
+        Tour tour = tourService.updateTour(id, updateTour);
+
+        if (tour == null) return ResponseEntity.notFound().build();
+
+        return ResponseEntity.ok(tour);
     }
 }

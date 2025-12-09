@@ -35,4 +35,17 @@ public class TourService {
     public String deleteTour(int id) {
         return tourRepository.deleteTourById(id);
     }
+
+    public Tour updateTour(int id, Tour updateTour) {
+        Tour tour = tourRepository.findById(id);
+
+        if (tour == null){
+            return null;
+        }
+
+        tour.setName(updateTour.getName());
+        tour.setCompanyId(updateTour.getCompanyId());
+        tour.setViewCount(updateTour.getViewCount());
+        return tour;
+    }
 }
