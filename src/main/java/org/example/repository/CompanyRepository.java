@@ -12,7 +12,7 @@ import java.util.Map;
 public class CompanyRepository {
 
     private final Map<Integer, Company> companies = new HashMap<>();
-
+    private int nextId = 6;
     public CompanyRepository(){
         companies.put(1, new Company(1, "Green Travel"));
         companies.put(2, new Company(2, "World Tours"));
@@ -21,9 +21,9 @@ public class CompanyRepository {
         companies.put(5, new Company(5, "Afsona Travel"));
     }
     public String save(Company company){
-        int id = companies.size();
-        company.setId(id);
-        companies.put(id, company);
+
+        company.setId(nextId++);
+        companies.put(company.getId(), company);
         return "Company: " + company.getName() + " created";
     }
 
@@ -38,5 +38,9 @@ public class CompanyRepository {
     public String deleteById(int id) {
         companies.entrySet().removeIf(entry -> entry.getValue().getId() == id);
         return "Company deleted";
+    }
+
+    public void update(Company company) {
+        companies.put(company.getId(), company);
     }
 }

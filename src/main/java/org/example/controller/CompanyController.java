@@ -52,4 +52,16 @@
 
             return ResponseEntity.ok(company);
         }
+
+        @PatchMapping("/{id}")
+        public ResponseEntity<Company> patchCompany(
+                @PathVariable("id") int id,
+                @RequestBody Company updateCompany
+        ) {
+            Company company = companyService.patchCompany(id, updateCompany);
+            if (company == null){
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(updateCompany);
+        }
     }

@@ -47,4 +47,20 @@ public class CompanyService {
         return existingCompany;
 
     }
+
+    public Company patchCompany(int id, Company updateCompany) {
+        Company existingCompany = companyRepository.findById(id);
+
+        if (existingCompany == null) {
+            return null;
+        }
+
+        if (updateCompany.getName() != null){
+            existingCompany.setName(updateCompany.getName());
+        }
+
+        companyRepository.update(existingCompany);
+        return existingCompany;
+
+    }
 }
