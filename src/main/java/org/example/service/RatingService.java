@@ -29,4 +29,12 @@ public class RatingService {
     public Rating getRatingById(int id) {
         return ratingRepository.findById(id);
     }
+
+    public String deleteRating(int id) {
+        Rating existing = ratingRepository.findById(id);
+        if (existing == null) {
+            return "User does not exist";
+        }
+        return ratingRepository.deleteById(id);
+    }
 }

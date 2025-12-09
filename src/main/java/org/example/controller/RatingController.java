@@ -34,4 +34,9 @@ public class RatingController {
     public Rating getByRatingId(@PathVariable("id") int id) {
         return ratingService.getRatingById(id);
     }
+
+    @DeleteMapping("/{id}")
+    public String deleteRating(@PathVariable("id") int id) {
+        return ratingService.deleteRating(id);
+    }
 }

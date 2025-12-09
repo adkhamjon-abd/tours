@@ -81,4 +81,9 @@ public class RatingRepository {
                 .orElse(null);
 
     }
+
+    public String deleteById(int id) {
+        ratings.values().removeIf(rating -> rating.getId() == id);
+        return "Rating was deleted";
+    }
 }
