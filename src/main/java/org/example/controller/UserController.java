@@ -46,4 +46,14 @@ public class UserController {
         }
         return ResponseEntity.ok(updated);
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<User> patchUser(
+            @PathVariable("id") int id,
+            @RequestBody User user
+    ) {
+        User updatedUser = userService.patchUser(id, user);
+        if (user == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(updatedUser);
+    }
 }

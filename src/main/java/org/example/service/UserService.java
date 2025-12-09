@@ -42,4 +42,21 @@ public class UserService {
         userRepository.save(existingUser);
         return existingUser;
     }
+
+    public User patchUser(int id, User updateUser) {
+        User existingUser = userRepository.findById(id);
+
+        if (existingUser == null) {return null;}
+
+        if (updateUser.getUsername() != null) {
+            existingUser.setUsername(updateUser.getUsername());
+        }
+
+        if (updateUser.getPassword() != null) {
+            existingUser.setPassword(updateUser.getPassword());
+        }
+
+        userRepository.save(existingUser);
+        return existingUser;
+    }
 }
