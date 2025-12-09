@@ -46,7 +46,7 @@ public class BookingService {
                 + booking.getTourId() + ". The Person who booked is: " + userRepository.findById(booking.getUserId()).getUsername();
     }
 
-    public List<Booking> getBooking(int id) {
+    public Booking getBooking(int id) {
         return bookingRepository.findById(id);
     }
 

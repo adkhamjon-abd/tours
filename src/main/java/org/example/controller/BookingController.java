@@ -34,7 +34,7 @@ public class BookingController {
     }
 
     @GetMapping("/{id}")
-    public List<Booking> getBooking(@PathVariable("id") int id) {
+    public Booking getBooking(@PathVariable("id") int id) {
         return bookingService.getBooking(id);
     }
 
