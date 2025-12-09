@@ -46,11 +46,10 @@ public class UserRepository {
     }
 
     public User findById(int id){
-        User user = users.get(id);
-        if (user == null) {
-            return null;
-        }
-        return user;
+        return users.values().stream()
+                .filter(u -> u.getId() == id)
+                .findFirst()
+                .orElse(null);
     }
 
 
