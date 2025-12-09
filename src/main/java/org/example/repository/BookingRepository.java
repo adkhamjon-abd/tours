@@ -15,7 +15,7 @@ public class BookingRepository {
     private final UserRepository userRepository;
 
     private final Map<Integer, Booking> bookings = new HashMap<>();
-
+    private int nextId = 2;
     public BookingRepository(UserRepository userRepository){
         bookings.put(1, new Booking(1, 1, 1));
         this.userRepository = userRepository;
@@ -30,9 +30,8 @@ public class BookingRepository {
                 return "The User has already booked this tour";
             }
         }
-        int id = bookings.size();
-        booking.setId(id);
-        bookings.put(id, booking);
+        booking.setId(nextId++);
+        bookings.put(booking.getId(), booking);
         return "Booking: " + booking.getId() + " for UserName: " + userRepository.findById(booking.getUserId()).getUsername();
     }
 
@@ -64,6 +63,10 @@ public class BookingRepository {
     public String deleteById(int id) {
         bookings.entrySet().removeIf(entry -> entry.getValue().getId() == id);
         return "Deleted";
+    }
+
+    public void update(Booking booking) {
+        bookings.put(booking.getId(), booking);
     }
 }
 

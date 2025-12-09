@@ -61,4 +61,17 @@ public class BookingService {
     public String deleteBooking(int id) {
         return bookingRepository.deleteById(id);
     }
+
+    public Booking updateBooking(int id, Booking booking) {
+        Booking existing = bookingRepository.findById(id);
+
+        if (existing == null){
+            return null;
+        }
+        existing.setUserId(booking.getUserId());
+        existing.setTourId(booking.getTourId());
+        bookingRepository.update(existing);
+
+        return existing;
+    }
 }

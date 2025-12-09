@@ -5,6 +5,8 @@ import org.example.repository.BookingRepository;
 import org.example.repository.TourRepository;
 import org.example.repository.UserRepository;
 import org.example.service.BookingService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,5 +53,12 @@ public class BookingController {
     @DeleteMapping("/{id}")
     public String deleteBooking(@PathVariable("id") int id) {
         return bookingService.deleteBooking(id);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Booking> updateBooking(@PathVariable("id") int id, @RequestBody Booking updateBooking) {
+        Booking booking = bookingService.updateBooking(id, updateBooking);
+        if (booking == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.ok(booking);
     }
 }
