@@ -57,4 +57,8 @@ public class TourRepository {
         tours.entrySet().removeIf(entry -> entry.getValue().getId() == id);
         return "Tour Deleted";
     }
+
+    public void update(Tour tour){
+        tours.put(tour.getId(), tour);
+    }
 }

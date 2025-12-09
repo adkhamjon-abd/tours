@@ -48,4 +48,29 @@ public class TourService {
         tour.setViewCount(updateTour.getViewCount());
         return tour;
     }
+
+    public Tour patchTour(int id, Tour updateTour) {
+        Tour existingTour = tourRepository.findById(id);
+
+        if (existingTour == null) return null;
+
+        existingTour.setName(updateTour.getName());
+        existingTour.setCompanyId(updateTour.getCompanyId());
+        existingTour.setViewCount(updateTour.getViewCount());
+
+        if (updateTour.getName() != null) {
+            existingTour.setName(updateTour.getName());
+        }
+
+        if (updateTour.getCompanyId() < 0){
+            existingTour.setCompanyId(updateTour.getCompanyId());
+        }
+
+        if (updateTour.getViewCount() < 0){
+            existingTour.setViewCount(updateTour.getViewCount());
+        }
+
+        tourRepository.update(existingTour);
+        return existingTour;
+    }
 }

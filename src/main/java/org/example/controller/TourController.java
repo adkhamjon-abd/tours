@@ -50,4 +50,14 @@ public class TourController {
 
         return ResponseEntity.ok(tour);
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Tour> patchTour(
+            @PathVariable("id") int id,
+            @RequestBody Tour updateTour
+    ) {
+        Tour tour = tourService.patchTour(id, updateTour);
+        if (tour == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(tour);
+    }
 }
