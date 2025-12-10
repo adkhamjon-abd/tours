@@ -37,4 +37,24 @@ public class RatingService {
         }
         return ratingRepository.deleteById(id);
     }
+
+    public Rating updateRating(int id, Rating updateRating) {
+        Rating rating = ratingRepository.findById(id);
+
+        if (rating == null){
+            return null;
+        }
+
+        rating.setUserId(updateRating.getUserId());
+        rating.setTourId(updateRating.getTourId());
+
+        if (updateRating.getScore() > 5 || updateRating.getScore() < 1) {
+            System.out.println("score out or range");
+            return null;
+        }
+        rating.setScore(updateRating.getScore());
+
+        ratingRepository.update(rating);
+        return rating;
+    }
 }

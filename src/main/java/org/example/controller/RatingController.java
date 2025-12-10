@@ -3,6 +3,7 @@ package org.example.controller;
 import org.example.model.Rating;
 import org.example.repository.RatingRepository;
 import org.example.service.RatingService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -38,5 +39,14 @@ public class RatingController {
     @DeleteMapping("/{id}")
     public String deleteRating(@PathVariable("id") int id) {
         return ratingService.deleteRating(id);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity updateRating(@PathVariable("id") int id, @RequestBody Rating updateRating){
+        Rating rating = ratingService.updateRating(id, updateRating);
+
+        if (rating == null) return ResponseEntity.notFound().build();
+
+        return ResponseEntity.ok(rating);
     }
 }

@@ -41,7 +41,7 @@ public class RatingRepository {
             }
         }
         rating.setId(nextId++);
-        ratings.put(nextId, rating);
+        ratings.put(rating.getId(), rating);
         return "Rating score of " + rating.getScore() + " got created";
     }
 
@@ -50,6 +50,7 @@ public class RatingRepository {
         for (Rating rating : ratings.values()){
             Tour tour = tourRepository.findById(rating.getTourId());
             User user = userRepository.findById(rating.getUserId());
+            if (user == null){ continue;}
 
             result += " UserName: " + user.getUsername() + " Tour Name: " + tour.getName() + "Tour id: "
                     + rating.getTourId() + " Score: "
@@ -85,5 +86,9 @@ public class RatingRepository {
     public String deleteById(int id) {
         ratings.values().removeIf(rating -> rating.getId() == id);
         return "Rating was deleted";
+    }
+
+    public void update(Rating updateRating){
+        ratings.put(updateRating.getId(), updateRating);
     }
 }
