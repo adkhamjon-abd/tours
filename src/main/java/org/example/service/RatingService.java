@@ -4,6 +4,8 @@ import org.example.model.Rating;
 import org.example.repository.RatingRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RatingService {
 
@@ -56,5 +58,32 @@ public class RatingService {
 
         ratingRepository.update(rating);
         return rating;
+    }
+
+    public Rating patchRating(int id, Rating patchRating) {
+        Rating rating = ratingRepository.findById(id);
+
+        if (rating == null) {
+            return null;
+        }
+
+        if (patchRating.getUserId() > 0){
+            rating.setUserId(patchRating.getUserId());
+        }
+
+        if (patchRating.getTourId() > 0){
+            rating.setTourId(patchRating.getTourId());
+        }
+
+        if (patchRating.getScore() > 0){
+            rating.setScore(patchRating.getScore());
+        }
+
+        ratingRepository.update(rating);
+        return rating;
+    }
+
+    public List<Rating> findAllJson() {
+        return ratingRepository.findAllJson();
     }
 }

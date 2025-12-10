@@ -6,6 +6,8 @@ import org.example.service.RatingService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/ratings")
 public class RatingController {
@@ -48,5 +50,20 @@ public class RatingController {
         if (rating == null) return ResponseEntity.notFound().build();
 
         return ResponseEntity.ok(rating);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity patchRating(@PathVariable("id") int id, @RequestBody Rating patchRating){
+        Rating rating = ratingService.patchRating(id, patchRating);
+
+        if (rating == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(rating);
+    }
+
+    @GetMapping("/json")
+    public List<Rating> findAllJson(){
+        return ratingService.findAllJson();
     }
 }

@@ -7,7 +7,9 @@ import org.example.model.User;
 import org.springframework.aop.framework.adapter.AfterReturningAdviceInterceptor;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -90,5 +92,10 @@ public class RatingRepository {
 
     public void update(Rating updateRating){
         ratings.put(updateRating.getId(), updateRating);
+    }
+
+    public List<Rating> findAllJson(){
+        List<Rating> result = new ArrayList<>(ratings.values());
+        return result;
     }
 }
