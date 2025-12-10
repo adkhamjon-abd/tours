@@ -74,4 +74,24 @@ public class BookingService {
 
         return existing;
     }
+
+    public Booking patchUser(int id, Booking updateBooking) {
+        Booking existing = bookingRepository.findById(id);
+
+        if (existing == null) return null;
+
+        if (userRepository.findById(updateBooking.getUserId()) == null) {
+            return null;
+        }
+        if (updateBooking.getUserId() >=0) {
+            existing.setUserId(updateBooking.getUserId());
+        }
+
+        if (updateBooking.getTourId() >= 0) {
+            existing.setTourId(updateBooking.getTourId());;
+        }
+
+        bookingRepository.update(existing);
+        return existing;
+    }
 }

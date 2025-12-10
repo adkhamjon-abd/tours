@@ -61,4 +61,13 @@ public class BookingController {
         if (booking == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         return ResponseEntity.ok(booking);
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Booking> patchBooking(@PathVariable("id") int id, @RequestBody Booking updateBooking) {
+        Booking booking = bookingService.patchUser(id, updateBooking);
+
+        if (booking == null) return ResponseEntity.notFound().build();
+
+        return ResponseEntity.ok(booking);
+    }
 }
