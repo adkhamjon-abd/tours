@@ -62,11 +62,11 @@ public class TourService {
             existingTour.setName(updateTour.getName());
         }
 
-        if (updateTour.getCompanyId() < 0){
+        if (updateTour.getCompanyId() >= 0){
             existingTour.setCompanyId(updateTour.getCompanyId());
         }
 
-        if (updateTour.getViewCount() < 0){
+        if (updateTour.getViewCount() >= 0){
             existingTour.setViewCount(updateTour.getViewCount());
         }
 
