@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.model.Booking;
+import org.example.model.User;
 import org.example.repository.BookingRepository;
 import org.example.repository.TourRepository;
 import org.example.repository.UserRepository;
@@ -55,8 +56,13 @@ public class BookingController {
     }
 
     @GetMapping("/users/{id}")
-    public List<Booking> getBookingsByUserId(@PathVariable("id") int id) {
-        return bookingService.getBookingByUserId(id);
+    public ResponseEntity<?> getBookingsByUserId(@PathVariable("id") int id) {
+        User user  = userRepository.findById(id);
+        if (user == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with such id does not exist");
+        }
+        List<Booking> bookings =  bookingService.getBookingByUserId(id);
+        return ResponseEntity.ok(bookings);
     }
 
     @GetMapping
