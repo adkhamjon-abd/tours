@@ -3,6 +3,7 @@
     import org.example.model.Company;
     import org.example.repository.CompanyRepository;
     import org.example.service.CompanyService;
+    import org.springframework.http.HttpStatus;
     import org.springframework.http.ResponseEntity;
     import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +22,14 @@
         }
 
         @GetMapping("/{id}")
-        public String getCompanyById(@PathVariable("id") int id){
-            return companyService.getCompanyById(id);
+        public ResponseEntity<?> getCompanyById(@PathVariable("id") int id){
+            Company company = companyService.getCompanyById(id);
+
+            if (company == null){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Company with such id does not exist");
+            }
+
+            return ResponseEntity.ok(company);
         }
 
         @PostMapping

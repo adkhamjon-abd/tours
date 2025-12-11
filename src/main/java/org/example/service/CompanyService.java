@@ -16,13 +16,9 @@ public class CompanyService {
 
     }
 
-    public String getCompanyById(int id) {
-        Company company = companyRepository.findById(id);
+    public Company getCompanyById(int id) {
 
-        if (company == null){ return "Company not found"; }
-
-        return "Company Name: " + company.getName() + "\n" +
-                "Company ID: " + company.getId();
+        return companyRepository.findById(id);
     }
 
     public String createCompany(Company company) {
