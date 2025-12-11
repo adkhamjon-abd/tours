@@ -6,6 +6,7 @@ import org.example.repository.BookingRepository;
 import org.example.repository.TourRepository;
 import org.example.repository.UserRepository;
 import org.example.service.BookingService;
+import org.example.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,95 +21,54 @@ public class BookingController {
     private final UserRepository userRepository;
     private final TourRepository tourRepository;
     private final BookingService bookingService;
+    private final UserService userService;
 
     public BookingController(BookingRepository bookingRepository,
                              UserRepository userRepository,
                              TourRepository tourRepository,
-                             BookingService bookingService){
+                             BookingService bookingService,
+                             UserService userService){
         this.bookingRepository = bookingRepository;
         this.userRepository = userRepository;
         this.tourRepository = tourRepository;
         this.bookingService = bookingService;
+        this.userService = userService;
     }
 
-    @PostMapping("/book")
-    public ResponseEntity<String> createBooking(@RequestBody Booking booking){
-        String bookingResult = bookingService.createBooking(booking);
-        if (bookingResult.startsWith("Booking was successful")){
-            return ResponseEntity.status(HttpStatus.CREATED).body("Booking created");
-        }
-        if (bookingResult.startsWith("No such user")){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with such id does not exist");
-        }
-        if (bookingResult.startsWith("Tour with such")){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tour with such id does not exist");
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to create booking");
+    @PostMapping("")
+    public ResponseEntity<?> createBooking(@RequestBody Booking booking){
+         return bookingService.createBooking(booking);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Booking> getBooking(@PathVariable("id") int id) {
-        Booking booking = bookingService.getBooking(id);
-        if (booking == null) {
-            ResponseEntity.status(HttpStatus.NOT_FOUND).body("Booking with such id does not exist");
-        }
-        return ResponseEntity.ok(booking);
+    public ResponseEntity<?> getBooking(@PathVariable("id") int id) {
+        return bookingService.getBooking(id);
     }
 
     @GetMapping("/users/{id}")
     public ResponseEntity<?> getBookingsByUserId(@PathVariable("id") int id) {
-        User user  = userRepository.findById(id);
-        if (user == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with such id does not exist");
-        }
-        List<Booking> bookings =  bookingService.getBookingByUserId(id);
-        return ResponseEntity.ok(bookings);
+        return bookingService.getBookingByUserId(id);
     }
 
     @GetMapping
     public ResponseEntity<List<Booking>> getAllBookings() {
         List<Booking> bookings = bookingService.getAllBookings();
 
-        if (bookings.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }
-
         return ResponseEntity.ok(bookings);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteBooking(@PathVariable("id") int id) {
-        Booking booking = bookingRepository.findById(id);
-        if (booking == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        bookingService.deleteBooking(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteBooking(@PathVariable("id") int id) {
+        return bookingService.deleteBooking(id);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateBooking(@PathVariable("id") int id, @RequestBody Booking updateBooking) {
-        if (updateBooking.getUserId() <= 0 || updateBooking.getTourId() <= 0) {
-            return ResponseEntity.badRequest().body("userId and tourId must be provided and > 0");
-        }
-
-        Booking booking = bookingService.updateBooking(id, updateBooking);
-        if (booking == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        return ResponseEntity.ok(booking);
+        return bookingService.updateBooking(id, updateBooking);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<?> patchBooking(@PathVariable("id") int id, @RequestBody Booking updateBooking) {
-        if (updateBooking.getUserId() <= 0) {
-            return ResponseEntity.badRequest().body("userId must be greater than 0");
-        }
-        if (updateBooking.getTourId() <= 0) {
-            return ResponseEntity.badRequest().body("tourId must be greater than 0");
-        }
-        Booking booking = bookingService.patchUser(id, updateBooking);
-
-        if (booking == null) return ResponseEntity.notFound().build();
-
-        return ResponseEntity.ok(booking);
+        return bookingService.patchUser(id, updateBooking);
     }
 }

@@ -6,6 +6,8 @@ import org.example.model.User;
 import org.example.repository.BookingRepository;
 import org.example.repository.TourRepository;
 import org.example.repository.UserRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,66 +28,91 @@ public class BookingService {
     }
 
 
-    public String createBooking(Booking booking) {
+    public ResponseEntity<?> createBooking(Booking booking) {
 
         User user = userRepository.findById(booking.getUserId());
 
         if (user == null) {
-            return "No such user with this id";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with such id does not exist");
         }
 
         Tour tour = tourRepository.findById(booking.getTourId());
 
         if ( tour == null) {
-            return "Tour with such id does not exist";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to create booking");
         }
 
         String result = bookingRepository.save(booking);
 
         if (result.startsWith("The User has already booked")) {
-            return result;
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("The User has already booked this tour");
         }
+        return ResponseEntity.status(HttpStatus.CREATED).body("Booking created");
 
-        return "Booking was successful for tour " + tourRepository.findById(booking.getTourId()).getName() + " with id: "
-                + booking.getTourId() + ". The Person who booked is: " + userRepository.findById(booking.getUserId()).getUsername();
     }
 
-    public Booking getBooking(int id) {
-        return bookingRepository.findById(id);
+    public ResponseEntity<?> getBooking(int id) {
+        Booking booking = bookingRepository.findById(id);
+        if (booking == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Booking with such id does not exist");
+        }
+        return ResponseEntity.ok(booking);
     }
 
-    public List<Booking> getBookingByUserId(int id) {
-        return bookingRepository.findByUserId(id);
+    public ResponseEntity<?> getBookingByUserId(int id) {
+        User user  = userRepository.findById(id);
+        if (user == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with such id does not exist");
+        }
+        List<Booking> bookings = bookingRepository.findByUserId(id);
+
+        return ResponseEntity.ok(bookings);
     }
 
     public List<Booking> getAllBookings() {
         return bookingRepository.findAll();
     }
 
-    public String deleteBooking(int id) {
-        return bookingRepository.deleteById(id);
+    public ResponseEntity<?> deleteBooking(int id) {
+        Booking booking = bookingRepository.findById(id);
+        if (booking == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.noContent().build();
     }
 
-    public Booking updateBooking(int id, Booking booking) {
+    public ResponseEntity<?> updateBooking(int id, Booking booking) {
+        if (booking.getUserId() <= 0 || booking.getTourId() <= 0) {
+            return ResponseEntity.badRequest().body("userId and tourId must be provided and > 0");
+        }
         Booking existing = bookingRepository.findById(id);
 
         if (existing == null){
-            return null;
+            return  ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         existing.setUserId(booking.getUserId());
         existing.setTourId(booking.getTourId());
         bookingRepository.update(existing);
 
-        return existing;
+        return ResponseEntity.status(HttpStatus.OK).body(existing);
     }
 
-    public Booking patchUser(int id, Booking updateBooking) {
+    public ResponseEntity<?> patchUser(int id, Booking updateBooking) {
+
+        //check if updateBooking is ok
+        if (updateBooking.getUserId() <= 0) {
+            return ResponseEntity.badRequest().body("userId must be greater than 0");
+        }
+        if (updateBooking.getTourId() <= 0) {
+            return ResponseEntity.badRequest().body("tourId must be greater than 0");
+        }
+
         Booking existing = bookingRepository.findById(id);
 
-        if (existing == null) return null;
+        if (existing == null) return ResponseEntity.notFound().build();
 
         if (userRepository.findById(updateBooking.getUserId()) == null) {
-            return null;
+            return ResponseEntity.notFound().build();
         }
         if (updateBooking.getUserId() >=0) {
             existing.setUserId(updateBooking.getUserId());
@@ -96,6 +123,6 @@ public class BookingService {
         }
 
         bookingRepository.update(existing);
-        return existing;
+        return ResponseEntity.ok(existing);
     }
 }
