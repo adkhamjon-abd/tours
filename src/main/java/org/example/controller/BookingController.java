@@ -98,8 +98,13 @@ public class BookingController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Booking> patchBooking(@PathVariable("id") int id, @RequestBody Booking updateBooking) {
-
+    public ResponseEntity<?> patchBooking(@PathVariable("id") int id, @RequestBody Booking updateBooking) {
+        if (updateBooking.getUserId() <= 0) {
+            return ResponseEntity.badRequest().body("userId must be greater than 0");
+        }
+        if (updateBooking.getTourId() <= 0) {
+            return ResponseEntity.badRequest().body("tourId must be greater than 0");
+        }
         Booking booking = bookingService.patchUser(id, updateBooking);
 
         if (booking == null) return ResponseEntity.notFound().build();
