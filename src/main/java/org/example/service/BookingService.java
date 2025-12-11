@@ -1,6 +1,8 @@
 package org.example.service;
 
 import org.example.model.Booking;
+import org.example.model.Tour;
+import org.example.model.User;
 import org.example.repository.BookingRepository;
 import org.example.repository.TourRepository;
 import org.example.repository.UserRepository;
@@ -26,13 +28,15 @@ public class BookingService {
 
     public String createBooking(Booking booking) {
 
-        Integer userId = userRepository.findById(booking.getUserId()).getId();
+        User user = userRepository.findById(booking.getUserId());
 
-        if (userId == null) {
+        if (user == null) {
             return "No such user with this id";
         }
 
-        if (tourRepository.findById(booking.getTourId()) == null) {
+        Tour tour = tourRepository.findById(booking.getTourId());
+
+        if ( tour == null) {
             return "Tour with such id does not exist";
         }
 

@@ -29,7 +29,13 @@ public class TourRepository {
     }
 
     public Tour findById(int id){
-        Tour tour = tours.get(id);
+        Tour tour = tours.values().stream()
+                .filter(u -> u.getId() == id)
+                .findFirst()
+                .orElse(null);
+        if (tour == null){
+            return null;
+        }
         tour.setViewCount(tour.getViewCount() + 1);
         return tour;
     }

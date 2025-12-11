@@ -31,8 +31,18 @@ public class BookingController {
     }
 
     @PostMapping("/book")
-    public String createBooking(@RequestBody Booking booking){
-        return bookingService.createBooking(booking);
+    public ResponseEntity<String> createBooking(@RequestBody Booking booking){
+        String bookingResult = bookingService.createBooking(booking);
+        if (bookingResult.startsWith("Booking was successful")){
+            return ResponseEntity.status(HttpStatus.CREATED).body("Booking created");
+        }
+        if (bookingResult.startsWith("No such user")){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with such id does not exist");
+        }
+        if (bookingResult.startsWith("Tour with such")){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tour with such id does not exist");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to create booking");
     }
 
     @GetMapping("/{id}")
