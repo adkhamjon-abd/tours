@@ -33,8 +33,9 @@
         }
 
         @PostMapping
-        public String createCompany(@RequestBody Company company){
-            return companyService.createCompany(company);
+        public ResponseEntity<?> createCompany(@RequestBody Company company){
+            Company created = companyService.createCompany(company);
+            return ResponseEntity.status(HttpStatus.CREATED).body(created);
         }
 
         @GetMapping()

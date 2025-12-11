@@ -21,7 +21,7 @@ public class CompanyService {
         return companyRepository.findById(id);
     }
 
-    public String createCompany(Company company) {
+    public Company createCompany(Company company) {
         return companyRepository.save(company);
     }
 

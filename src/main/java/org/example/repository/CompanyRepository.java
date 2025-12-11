@@ -20,11 +20,11 @@ public class CompanyRepository {
         companies.put(4, new Company(4, "Holiday Abroad"));
         companies.put(5, new Company(5, "Afsona Travel"));
     }
-    public String save(Company company){
+    public Company save(Company company){
 
         company.setId(nextId++);
         companies.put(company.getId(), company);
-        return "Company: " + company.getName() + " created";
+        return company;
     }
 
     public Company findById(int id){
