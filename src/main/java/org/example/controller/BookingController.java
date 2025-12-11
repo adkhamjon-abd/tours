@@ -46,8 +46,12 @@ public class BookingController {
     }
 
     @GetMapping("/{id}")
-    public Booking getBooking(@PathVariable("id") int id) {
-        return bookingService.getBooking(id);
+    public ResponseEntity<Booking> getBooking(@PathVariable("id") int id) {
+        Booking booking = bookingService.getBooking(id);
+        if (booking == null) {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body("Booking with such id does not exist");
+        }
+        return ResponseEntity.ok(booking);
     }
 
     @GetMapping("/users/{id}")
