@@ -29,8 +29,15 @@ public class CompanyService {
         return companyRepository.findAll();
     }
 
-    public String deleteCompany(int id) {
-        return companyRepository.deleteById(id);
+    public boolean deleteCompany(int id) {
+        Company company = companyRepository.findById(id);
+
+        if (company == null){
+            return false;
+        }
+
+        companyRepository.deleteById(id);
+        return true;
     }
 
     public Company updateCompany(int id, Company updateCompany) {

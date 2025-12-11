@@ -46,8 +46,13 @@
         }
 
         @DeleteMapping("/{id}")
-        public String deleteCompany(@PathVariable("id") int id){
-            return companyService.deleteCompany(id);
+        public ResponseEntity<?> deleteCompany(@PathVariable("id") int id){
+            boolean isDeleted = companyService.deleteCompany(id);
+
+            if (!isDeleted){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Company with such id does not exist");
+            }
+            return ResponseEntity.noContent().build();
         }
 
         @PutMapping("/{id}")
