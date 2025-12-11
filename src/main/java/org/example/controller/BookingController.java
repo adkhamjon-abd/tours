@@ -87,7 +87,11 @@ public class BookingController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Booking> updateBooking(@PathVariable("id") int id, @RequestBody Booking updateBooking) {
+    public ResponseEntity<?> updateBooking(@PathVariable("id") int id, @RequestBody Booking updateBooking) {
+        if (updateBooking.getUserId() <= 0 || updateBooking.getTourId() <= 0) {
+            return ResponseEntity.badRequest().body("userId and tourId must be provided and > 0");
+        }
+
         Booking booking = bookingService.updateBooking(id, updateBooking);
         if (booking == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         return ResponseEntity.ok(booking);
@@ -95,6 +99,7 @@ public class BookingController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<Booking> patchBooking(@PathVariable("id") int id, @RequestBody Booking updateBooking) {
+
         Booking booking = bookingService.patchUser(id, updateBooking);
 
         if (booking == null) return ResponseEntity.notFound().build();
