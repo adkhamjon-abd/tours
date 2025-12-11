@@ -39,8 +39,10 @@
         }
 
         @GetMapping()
-        public List<Company> getAll(){
-            return companyService.getAllCompanies();
+        public ResponseEntity<List<Company>> getAll(){
+            List<Company> companies = companyService.getAllCompanies();
+
+            return ResponseEntity.ok(companies);
         }
 
         @DeleteMapping("/{id}")
