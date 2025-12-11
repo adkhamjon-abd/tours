@@ -77,8 +77,13 @@ public class BookingController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteBooking(@PathVariable("id") int id) {
-        return bookingService.deleteBooking(id);
+    public ResponseEntity<String> deleteBooking(@PathVariable("id") int id) {
+        Booking booking = bookingRepository.findById(id);
+        if (booking == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        bookingService.deleteBooking(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
