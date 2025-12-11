@@ -66,8 +66,14 @@ public class BookingController {
     }
 
     @GetMapping
-    public List<Booking> getAllBookings() {
-        return bookingService.getAllBookings();
+    public ResponseEntity<List<Booking>> getAllBookings() {
+        List<Booking> bookings = bookingService.getAllBookings();
+
+        if (bookings.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
+        return ResponseEntity.ok(bookings);
     }
 
     @DeleteMapping("/{id}")
