@@ -2,6 +2,7 @@ package org.example.repository;
 
 import org.example.model.Booking;
 import org.example.model.User;
+import org.example.response.ApiResponse;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -21,18 +22,13 @@ public class BookingRepository {
         this.userRepository = userRepository;
     }
 
-    public String save(Booking booking){
+    public Booking save(Booking booking){
         int userId = booking.getUserId();
         int tourId = booking.getTourId();
 
-        for(Booking current : bookings.values()){
-            if (current.getTourId() == tourId && current.getUserId() == userId){
-                return "The User has already booked this tour";
-            }
-        }
         booking.setId(nextId++);
         bookings.put(booking.getId(), booking);
-        return "Booking: " + booking.getId() + " for UserName: " + userRepository.findById(booking.getUserId()).getUsername();
+        return booking;
     }
 
     public Booking findById(int id) {
@@ -60,9 +56,8 @@ public class BookingRepository {
         return idBookings;
     }
 
-    public String deleteById(int id) {
+    public void deleteById(int id) {
         bookings.entrySet().removeIf(entry -> entry.getValue().getId() == id);
-        return "Deleted";
     }
 
     public void update(Booking booking) {
