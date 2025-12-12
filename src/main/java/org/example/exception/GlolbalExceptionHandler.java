@@ -20,4 +20,10 @@ public class GlolbalExceptionHandler {
         ApiResponse<String> response = new ApiResponse<>(userNotFoundException.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
+
+    @ExceptionHandler(TourNotFoundException.class)
+    public ResponseEntity<ApiResponse<String>> tourNotFoundException(TourNotFoundException tourNotFoundException){
+        ApiResponse<String> response = new ApiResponse<>(tourNotFoundException.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
 }
