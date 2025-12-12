@@ -23,13 +23,7 @@
 
         @GetMapping("/{id}")
         public ResponseEntity<?> getCompanyById(@PathVariable("id") int id){
-            Company company = companyService.getCompanyById(id);
-
-            if (company == null){
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Company with such id does not exist");
-            }
-
-            return ResponseEntity.ok(company);
+            return companyService.getCompanyById(id);
         }
 
         @PostMapping
@@ -47,36 +41,21 @@
 
         @DeleteMapping("/{id}")
         public ResponseEntity<?> deleteCompany(@PathVariable("id") int id){
-            boolean isDeleted = companyService.deleteCompany(id);
-
-            if (!isDeleted){
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Company with such id does not exist");
-            }
-            return ResponseEntity.noContent().build();
+            return companyService.deleteCompany(id);
         }
 
         @PutMapping("/{id}")
-        public ResponseEntity<Company> updateCompany(
+        public ResponseEntity<?> updateCompany(
                 @PathVariable("id") int id,
                 @RequestBody Company updateCompany) {
-            Company company = companyService.updateCompany(id, updateCompany);
-
-            if (company == null) {
-                return ResponseEntity.notFound().build();
-            }
-
-            return ResponseEntity.ok(company);
+            return companyService.updateCompany(id, updateCompany);
         }
 
         @PatchMapping("/{id}")
-        public ResponseEntity<Company> patchCompany(
+        public ResponseEntity<?> patchCompany(
                 @PathVariable("id") int id,
                 @RequestBody Company updateCompany
         ) {
-            Company company = companyService.patchCompany(id, updateCompany);
-            if (company == null){
-                return ResponseEntity.notFound().build();
-            }
-            return ResponseEntity.ok(updateCompany);
+            return companyService.patchCompany(id, updateCompany);
         }
     }

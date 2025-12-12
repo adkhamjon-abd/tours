@@ -2,6 +2,8 @@ package org.example.service;
 
 import org.example.model.Company;
 import org.example.repository.CompanyRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,9 +18,12 @@ public class CompanyService {
 
     }
 
-    public Company getCompanyById(int id) {
-
-        return companyRepository.findById(id);
+    public ResponseEntity<?> getCompanyById(int id) {
+        Company company = companyRepository.findById(id);
+        if (company == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Company with such id does not exist");
+        }
+        return ResponseEntity.ok(company);
     }
 
     public Company createCompany(Company company) {
@@ -29,34 +34,36 @@ public class CompanyService {
         return companyRepository.findAll();
     }
 
-    public boolean deleteCompany(int id) {
+    public ResponseEntity<?> deleteCompany(int id) {
+
         Company company = companyRepository.findById(id);
 
         if (company == null){
-            return false;
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Company with such id does not exist");
         }
 
         companyRepository.deleteById(id);
-        return true;
+        return ResponseEntity.noContent().build();
     }
 
-    public Company updateCompany(int id, Company updateCompany) {
+    public ResponseEntity<?> updateCompany(int id, Company updateCompany) {
         Company existingCompany = companyRepository.findById(id);
+
         if (existingCompany == null){
-            return null;
+            return ResponseEntity.notFound().build();
         }
 
         existingCompany.setName(updateCompany.getName());
         companyRepository.update(existingCompany);
-        return existingCompany;
+        return ResponseEntity.ok(existingCompany);
 
     }
 
-    public Company patchCompany(int id, Company updateCompany) {
+    public ResponseEntity<?> patchCompany(int id, Company updateCompany) {
         Company existingCompany = companyRepository.findById(id);
 
         if (existingCompany == null) {
-            return null;
+            return ResponseEntity.notFound().build();
         }
 
         if (updateCompany.getName() != null){
@@ -64,7 +71,7 @@ public class CompanyService {
         }
 
         companyRepository.update(existingCompany);
-        return existingCompany;
+        return ResponseEntity.ok(existingCompany);
 
     }
 }
