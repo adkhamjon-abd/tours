@@ -26,4 +26,10 @@ public class GlolbalExceptionHandler {
         ApiResponse<String> response = new ApiResponse<>(tourNotFoundException.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<ApiResponse<String>> userAlreadyExistsException(UserAlreadyExistsException userAlreadyExistsException){
+        ApiResponse<String> response = new ApiResponse<>(userAlreadyExistsException.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
 }
