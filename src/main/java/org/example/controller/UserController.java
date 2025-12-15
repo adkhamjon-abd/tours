@@ -45,7 +45,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(
+    public ResponseEntity<ApiResponse<User>> updateUser(
             @PathVariable("id") int id,
             @RequestBody User user
     ) {
@@ -53,16 +53,16 @@ public class UserController {
         if (updated == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.ok(updated);
+        return ResponseEntity.ok(new ApiResponse<>(updated));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<User> patchUser(
+    public ResponseEntity<ApiResponse<User>> patchUser(
             @PathVariable("id") int id,
             @RequestBody User user
     ) {
         User updatedUser = userService.patchUser(id, user);
         if (updatedUser == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(updatedUser));
     }
 }
