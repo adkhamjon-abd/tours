@@ -1,10 +1,13 @@
 package org.example.controller;
 
 import org.example.model.User;
+import org.example.response.ApiResponse;
 import org.example.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -17,23 +20,29 @@ public class UserController {
         this.userService =  userService;
     }
 
-    @PostMapping("/register")
-    public String createUser(@RequestBody User user){
-        return userService.createUser(user);
+    @PostMapping
+    public ResponseEntity<ApiResponse<User>> createUser(@RequestBody User user){
+        User createdUser = userService.createUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(createdUser));
     };
 
     @GetMapping
-    public String getAll(){
-        return userService.getAll();
+    public ResponseEntity<ApiResponse<List<User>>> getAll(){
+        List<User> users = userService.getAll();
+        return ResponseEntity.ok().body(new ApiResponse<>(users));
     }
 
     @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable("id") int id) {
-        return userService.deleteUser(id);
+    public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable("id") int id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")
-    public User getById(@PathVariable("id") int id) { return userService.getById(id);}
+    public ResponseEntity<ApiResponse<User>> getById(@PathVariable("id") int id) {
+        User user = userService.getById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(user));
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(
@@ -53,7 +62,7 @@ public class UserController {
             @RequestBody User user
     ) {
         User updatedUser = userService.patchUser(id, user);
-        if (user == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(updatedUser);
+        if (updatedUser == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
     }
 }

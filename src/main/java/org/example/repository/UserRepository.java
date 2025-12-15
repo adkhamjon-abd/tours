@@ -2,7 +2,10 @@ package org.example.repository;
 
 import org.example.model.User;
 import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -14,15 +17,11 @@ public class UserRepository {
         users.put(1, new User(1, "admin", "admin"));
     }
 
-    public String save(User user){
-        for (User existing : users.values()) {
-            if (existing.getUsername().equals(user.getUsername())) {
-                return "Username already exists. Please choose another.";
-            }
-        }
+    public User save(User user){
+
         user.setId(nextId++);
         users.put(user.getId(), user);
-        return "User: " + user.getUsername() + " created with id: " + user.getId();
+        return user;
     }
 
     public User findByUsername(String userName){
@@ -33,16 +32,8 @@ public class UserRepository {
         return user;
     }
 
-    public String findAll() {
-        String result = "";
-        for (User user : users.values()) {
-            String username = user.getUsername();
-            String password = user.getPassword();
-
-            // Corrected concatenation and newline handling
-            result += " UserName: " + username + " Password:" + password + "\n";
-        }
-        return result;
+    public List<User> findAll() {
+        return new ArrayList<>(users.values());
     }
 
     public User findById(int id){
@@ -53,8 +44,12 @@ public class UserRepository {
     }
 
 
-    public String deleteById(int id) {
+    public void deleteById(int id) {
         users.entrySet().removeIf(entry -> entry.getValue().getId() == id);
-        return "User Deleted";
+    }
+
+    public User update(User existingUser) {
+        users.replace(existingUser.getId(), existingUser);
+        return existingUser;
     }
 }
