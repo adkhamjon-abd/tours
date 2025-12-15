@@ -2,11 +2,13 @@ package org.example.controller;
 
 import org.example.model.Tour;
 import org.example.repository.CompanyRepository;
-import org.example.repository.TourRepository;
+import org.example.response.ApiResponse;
 import org.example.service.TourService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/tours")
@@ -20,44 +22,44 @@ public class TourController {
     }
 
     @PostMapping
-    public String createTour(@RequestBody Tour tour){
-        return tourService.createTour(tour);
+    public ResponseEntity<ApiResponse<Tour>> createTour(@RequestBody Tour tour){
+        Tour created = tourService.createTour(tour);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(tour));
     }
 
     @GetMapping("/{id}")
-    public String getById(@PathVariable("id") int id){
-        return tourService.getById(id);
+    public ResponseEntity<ApiResponse<Tour>> getById(@PathVariable("id") int id){
+        Tour tour = tourService.getById(id);
+        return ResponseEntity.ok(new ApiResponse<>(tour));
     }
 
     @GetMapping
-    public String getAll(){
-        return tourService.getAll();
+    public ResponseEntity<ApiResponse<List<Tour>>> getAll(){
+        List<Tour> tours = tourService.getAll();
+        return ResponseEntity.ok(new ApiResponse<>(tours));
     }
 
     @DeleteMapping("/{id}")
-    public String deleteTour(@PathVariable("id") int id){
-        return tourService.deleteTour(id);
+    public ResponseEntity<ApiResponse<Void>> deleteTour(@PathVariable("id") int id){
+        tourService.deleteTour(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Tour> updateTour(
+    public ResponseEntity<ApiResponse<Tour>> updateTour(
             @PathVariable("id") int id,
             @RequestBody Tour updateTour
     ) {
         Tour tour = tourService.updateTour(id, updateTour);
-
-        if (tour == null) return ResponseEntity.notFound().build();
-
-        return ResponseEntity.ok(tour);
+        return ResponseEntity.ok(new ApiResponse<>(tour));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Tour> patchTour(
+    public ResponseEntity<ApiResponse<Tour>> patchTour(
             @PathVariable("id") int id,
             @RequestBody Tour updateTour
     ) {
         Tour tour = tourService.patchTour(id, updateTour);
-        if (tour == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(tour);
+        return ResponseEntity.ok(new ApiResponse<>(tour));
     }
 }

@@ -2,6 +2,7 @@ package org.example.repository;
 
 import org.example.model.Tour;
 import org.example.model.User;
+import org.example.service.UserService;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -22,10 +23,10 @@ public class TourRepository {
         tours.put(5, new Tour(5, "Malaysia", 5, 0));
     }
 
-    public String save(Tour tour){
+    public Tour save(Tour tour){
         tour.setId(nextId++);
         tours.put(tour.getId(), tour);
-        return "Tour: " + tour.getName() + " created for Company with id" + tour.getCompanyId();
+        return tour;
     }
 
     public Tour findById(int id){
@@ -46,22 +47,12 @@ public class TourRepository {
                 .collect(Collectors.toList());
     }
 
-    public String findAll(){
-        //return new ArrayList<>(tours.values());
-        String result = "";
-        for (Tour tour : tours.values()) {
-            String tourName = tour.getName();
-
-
-            // Corrected concatenation and newline handling
-            result += " TourName: " + tourName + "\n";
-        }
-        return result;
+    public List<Tour> findAll(){
+        return new ArrayList<>(tours.values());
     }
 
-    public String deleteTourById(int id) {
+    public void deleteTourById(int id) {
         tours.entrySet().removeIf(entry -> entry.getValue().getId() == id);
-        return "Tour Deleted";
     }
 
     public void update(Tour tour){

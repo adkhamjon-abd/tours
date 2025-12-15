@@ -1,9 +1,16 @@
 package org.example.service;
 
+import org.example.exception.CompanyNotFoundException;
+import org.example.exception.TourAlreadyExistsException;
+import org.example.exception.TourNotFoundException;
 import org.example.model.Tour;
 import org.example.repository.CompanyRepository;
 import org.example.repository.TourRepository;
+import org.example.response.ApiResponse;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class TourService {
@@ -16,31 +23,44 @@ public class TourService {
         this.companyRepository = companyRepository;
     }
 
-    public String createTour(Tour tour) {
-        if (companyRepository.findById(tour.getCompanyId()) == null) {
-            return "Company does not exist";
+    public Tour createTour(Tour tour) {
+        if (tourRepository.findById(tour.getId()) != null) {
+            throw new TourAlreadyExistsException("Tour with such id already exists");
         }
+
+        if (companyRepository.findById(tour.getCompanyId()) == null) {
+            throw new CompanyNotFoundException("Company with such id does not exist");
+        }
+        //companyid and id
         return tourRepository.save(tour);
     }
 
-    public String getById(int id) {
+    public Tour getById(int id) {
         Tour tour = tourRepository.findById(id);
-        return "Tour Name: " + tour.getName() + " The view count is: " + tour.getViewCount();
+        if (tour == null) {
+            throw new TourNotFoundException("Tour with such id does not exist");
+        }
+        return tourRepository.findById(id);
     }
 
-    public String getAll() {
-        return tourRepository.findAll().toString();
+    public List<Tour> getAll() {
+        List<Tour> tours = tourRepository.findAll();
+        return tours;
     }
 
-    public String deleteTour(int id) {
-        return tourRepository.deleteTourById(id);
+    public void deleteTour(int id) {
+        Tour tour = tourRepository.findById(id);
+        if (tour == null) {
+            throw new TourNotFoundException("Tour with such id does not exist");
+        }
+        tourRepository.deleteTourById(id);
     }
 
     public Tour updateTour(int id, Tour updateTour) {
         Tour tour = tourRepository.findById(id);
 
         if (tour == null){
-            return null;
+            throw new TourNotFoundException("Tour with such id does not exist");
         }
 
         tour.setName(updateTour.getName());
@@ -52,7 +72,7 @@ public class TourService {
     public Tour patchTour(int id, Tour updateTour) {
         Tour existingTour = tourRepository.findById(id);
 
-        if (existingTour == null) return null;
+        if (existingTour == null) throw new TourNotFoundException("Tour with such id does not exist");
 
         existingTour.setName(updateTour.getName());
         existingTour.setCompanyId(updateTour.getCompanyId());
