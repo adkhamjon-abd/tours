@@ -38,4 +38,10 @@ public class GlolbalExceptionHandler {
         ApiResponse<String> response = new ApiResponse<>(companyNotFoundException.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
+
+    @ExceptionHandler(CompanyAlreadyExistsException.class)
+    public ResponseEntity<ApiResponse<String>> companyAlreadyExistsException(CompanyAlreadyExistsException companyAlreadyExistsException){
+        ApiResponse<String> response = new ApiResponse<>(companyAlreadyExistsException.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
 }
