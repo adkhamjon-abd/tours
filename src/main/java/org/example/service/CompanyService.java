@@ -1,5 +1,7 @@
 package org.example.service;
 
+import org.example.exception.CompanyAlreadyExistsException;
+import org.example.exception.CompanyNotFoundException;
 import org.example.model.Company;
 import org.example.repository.CompanyRepository;
 import org.springframework.http.HttpStatus;
@@ -18,15 +20,17 @@ public class CompanyService {
 
     }
 
-    public ResponseEntity<?> getCompanyById(int id) {
+    public Company getCompanyById(int id) {
         Company company = companyRepository.findById(id);
-        if (company == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Company with such id does not exist");
-        }
-        return ResponseEntity.ok(company);
+        if (company == null) throw new CompanyNotFoundException("Company with such id does not exist");
+        return company;
     }
 
     public Company createCompany(Company company) {
+        Company existing = companyRepository.findById(company.getId());
+        if (existing != null){
+            throw new CompanyAlreadyExistsException("Company with such id already exists");
+        }
         return companyRepository.save(company);
     }
 
@@ -34,36 +38,35 @@ public class CompanyService {
         return companyRepository.findAll();
     }
 
-    public ResponseEntity<?> deleteCompany(int id) {
+    public void deleteCompany(int id) {
 
         Company company = companyRepository.findById(id);
 
         if (company == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Company with such id does not exist");
+            throw new CompanyNotFoundException("Company with such id does not exist");
         }
 
         companyRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
     }
 
-    public ResponseEntity<?> updateCompany(int id, Company updateCompany) {
+    public Company updateCompany(int id, Company updateCompany) {
         Company existingCompany = companyRepository.findById(id);
 
         if (existingCompany == null){
-            return ResponseEntity.notFound().build();
+            throw new CompanyNotFoundException("Company with such id does not exist");
         }
 
         existingCompany.setName(updateCompany.getName());
         companyRepository.update(existingCompany);
-        return ResponseEntity.ok(existingCompany);
+        return existingCompany;
 
     }
 
-    public ResponseEntity<?> patchCompany(int id, Company updateCompany) {
+    public Company patchCompany(int id, Company updateCompany) {
         Company existingCompany = companyRepository.findById(id);
 
         if (existingCompany == null) {
-            return ResponseEntity.notFound().build();
+            throw new CompanyNotFoundException("Company with such id does not exist");
         }
 
         if (updateCompany.getName() != null){
@@ -71,7 +74,7 @@ public class CompanyService {
         }
 
         companyRepository.update(existingCompany);
-        return ResponseEntity.ok(existingCompany);
+        return existingCompany;
 
     }
 }
