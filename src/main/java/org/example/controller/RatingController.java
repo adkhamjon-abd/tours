@@ -2,7 +2,9 @@ package org.example.controller;
 
 import org.example.model.Rating;
 import org.example.repository.RatingRepository;
+import org.example.response.ApiResponse;
 import org.example.service.RatingService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,59 +13,50 @@ import java.util.List;
 @RestController
 @RequestMapping("/ratings")
 public class RatingController {
-    private final RatingRepository ratingRepository;
     private final RatingService ratingService;
-    public RatingController(RatingRepository ratingRepository, RatingService ratingService){
-        this.ratingRepository = ratingRepository;
+    public RatingController(RatingService ratingService){
         this.ratingService =  ratingService;
     }
 
     @PostMapping()
-    public String createRating(@RequestBody Rating rating){
-        return ratingService.createRating(rating);
+    public ResponseEntity<ApiResponse<Rating>> createRating(@RequestBody Rating rating){
+        Rating newRating = ratingService.createRating(rating);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(newRating));
     }
 
     @GetMapping()
-    public String getAll(){
-        return ratingService.getAll();
+    public ResponseEntity<ApiResponse<List<Rating>>> getAll(){
+        List<Rating> ratings = ratingService.getAll();
+        return ResponseEntity.ok(new ApiResponse<>(ratings));
     }
 
     @GetMapping("/tours/{id}")
-    public String getRatingByTourId(@PathVariable("id") int id){
-        return ratingService.getRatingByTourId(id);
+    public ResponseEntity<ApiResponse<Double>> getAverageRatingByTourId(@PathVariable("id") int id){
+        Double average = ratingService.getAverageRatingByTourId(id);
+        return ResponseEntity.ok(new ApiResponse<>(average));
     }
 
     @GetMapping("/{id}")
-    public Rating getByRatingId(@PathVariable("id") int id) {
-        return ratingService.getRatingById(id);
+    public ResponseEntity<ApiResponse<Rating>> getRating(@PathVariable("id") int id) {
+        Rating rating = ratingService.getRatingById(id);
+        return ResponseEntity.ok(new ApiResponse<>(rating));
     }
 
     @DeleteMapping("/{id}")
-    public String deleteRating(@PathVariable("id") int id) {
-        return ratingService.deleteRating(id);
+    public ResponseEntity<ApiResponse<Void>> deleteRating(@PathVariable("id") int id) {
+        ratingService.deleteRating(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateRating(@PathVariable("id") int id, @RequestBody Rating updateRating){
+    public ResponseEntity<ApiResponse<Rating>> updateRating(@PathVariable("id") int id, @RequestBody Rating updateRating){
         Rating rating = ratingService.updateRating(id, updateRating);
-
-        if (rating == null) return ResponseEntity.notFound().build();
-
-        return ResponseEntity.ok(rating);
+        return ResponseEntity.ok(new ApiResponse<>(rating));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity patchRating(@PathVariable("id") int id, @RequestBody Rating patchRating){
+    public ResponseEntity<ApiResponse<Rating>> patchRating(@PathVariable("id") int id, @RequestBody Rating patchRating){
         Rating rating = ratingService.patchRating(id, patchRating);
-
-        if (rating == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(rating);
-    }
-
-    @GetMapping("/json")
-    public List<Rating> findAllJson(){
-        return ratingService.findAllJson();
+        return ResponseEntity.ok(new ApiResponse<>(rating));
     }
 }

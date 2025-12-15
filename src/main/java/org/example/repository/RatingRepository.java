@@ -1,10 +1,8 @@
 package org.example.repository;
 
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.example.model.Rating;
 import org.example.model.Tour;
 import org.example.model.User;
-import org.springframework.aop.framework.adapter.AfterReturningAdviceInterceptor;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -31,35 +29,26 @@ public class RatingRepository {
         this.userRepository = userRepository;
     }
 
-    public String save(Rating rating){
+    public Rating save(Rating rating){
+
         for (Map.Entry<Integer, Rating> existingEntry : ratings.entrySet()){
             Integer key = existingEntry.getKey();
-            Rating  value = existingEntry.getValue();
+            Rating value = existingEntry.getValue();
 
+            //When user tries to create Rating with same id then score is updated
             if (value.getTourId() == rating.getTourId() && value.getUserId() == rating.getUserId()){
                 value.setScore(rating.getScore());
                 ratings.put(key, value);
-                return "Score has changed to " + value.getScore();
+                return value;
             }
         }
         rating.setId(nextId++);
         ratings.put(rating.getId(), rating);
-        return "Rating score of " + rating.getScore() + " got created";
+        return rating;
     }
 
-    public String findAll(){
-        String result = "";
-        for (Rating rating : ratings.values()){
-            Tour tour = tourRepository.findById(rating.getTourId());
-            User user = userRepository.findById(rating.getUserId());
-            if (user == null){ continue;}
-
-            result += " UserName: " + user.getUsername() + " Tour Name: " + tour.getName() + "Tour id: "
-                    + rating.getTourId() + " Score: "
-                    + rating.getScore()  + "\n";
-        }
-
-        return result;
+    public List<Rating> findAll(){
+        return new ArrayList<>(ratings.values());
     }
 
     public String fingAverageRatingByTourId(int id) {
@@ -85,17 +74,11 @@ public class RatingRepository {
 
     }
 
-    public String deleteById(int id) {
+    public void deleteById(int id) {
         ratings.values().removeIf(rating -> rating.getId() == id);
-        return "Rating was deleted";
     }
 
     public void update(Rating updateRating){
         ratings.put(updateRating.getId(), updateRating);
-    }
-
-    public List<Rating> findAllJson(){
-        List<Rating> result = new ArrayList<>(ratings.values());
-        return result;
     }
 }
