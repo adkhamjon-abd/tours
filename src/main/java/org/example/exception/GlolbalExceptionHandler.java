@@ -44,4 +44,10 @@ public class GlolbalExceptionHandler {
         ApiResponse<String> response = new ApiResponse<>(companyAlreadyExistsException.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
+
+    @ExceptionHandler(TourAlreadyExistsException.class)
+    public ResponseEntity<ApiResponse<String>> tourAlreadyExistsException(TourAlreadyExistsException tourAlreadyExistsException){
+        ApiResponse<String> response = new ApiResponse<>(tourAlreadyExistsException.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
 }
