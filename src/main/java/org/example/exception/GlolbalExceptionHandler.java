@@ -50,4 +50,22 @@ public class GlolbalExceptionHandler {
         ApiResponse<String> response = new ApiResponse<>(tourAlreadyExistsException.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
+
+    @ExceptionHandler(RatingNotFoundException.class)
+    public ResponseEntity<ApiResponse<String>> ratingNotFoundException(RatingNotFoundException ratingNotFoundException){
+        ApiResponse<String> response = new ApiResponse<>(ratingNotFoundException.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(RatingAlreadyExistsException.class)
+    public ResponseEntity<ApiResponse<String>> ratingAlreadyExistsException(RatingAlreadyExistsException ratingAlreadyExistsException){
+        ApiResponse<String> response = new ApiResponse<>(ratingAlreadyExistsException.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(RatingScoreOutOfRangeException.class)
+    public ResponseEntity<ApiResponse<String>> RatingScoreOutOfRangeException(RatingScoreOutOfRangeException ratingScoreOutOfRangeException){
+        ApiResponse<String> response = new ApiResponse<>(ratingScoreOutOfRangeException.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
 }
