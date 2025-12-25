@@ -2,7 +2,6 @@ package org.example.service;
 
 import org.example.exception.*;
 import org.example.model.Booking;
-import org.example.model.Tour;
 import org.example.model.User;
 import org.example.repository.BookingRepository;
 import org.example.repository.TourRepository;
@@ -54,10 +53,10 @@ public class BookingService {
     }
 
     public Booking getBooking(int id) {
-        Booking booking = bookingRepository.findById(id);
-        if (booking == null) {
-            throw new BookingNotFoundException("Booking with such id does not exist");
-        }
+        Booking booking = bookingRepository
+                .findById(id)
+                .orElseThrow(() -> new BookingNotFoundException("Booking with such id does not exist"));
+
         return booking;
     }
 
@@ -74,10 +73,9 @@ public class BookingService {
     }
 
     public void deleteBooking(int id) {
-        Booking booking = bookingRepository.findById(id);
-        if (booking == null) {
-            throw new BookingNotFoundException("Booking with such Id does not exist");
-        }
+        Booking booking = bookingRepository
+                .findById(id)
+                .orElseThrow(() -> new BookingNotFoundException("Booking with such id does not exist"));
         bookingRepository.deleteById(id);
     }
 
@@ -85,11 +83,9 @@ public class BookingService {
         if (booking.getUserId() <= 0 || booking.getTourId() <= 0) {
             throw new InvalidBookingDataException("userId and tourId must be provided and > 0");
         }
-        Booking existing = bookingRepository.findById(id);
-
-        if (existing == null){
-            throw new BookingNotFoundException("There is no booking with such Id");
-        }
+        Booking existing = bookingRepository
+                .findById(id)
+                .orElseThrow(() -> new BookingNotFoundException("Booking with such id does not exist"));
 
         existing.setUserId(booking.getUserId());
         existing.setTourId(booking.getTourId());
@@ -101,9 +97,9 @@ public class BookingService {
     public Booking patchBooking(int id, Booking updateBooking) {
 
 
-        Booking existing = bookingRepository.findById(id);
-
-        if (existing == null){ throw new BookingNotFoundException("Booking with such Id does not exist"); }
+        Booking existing = bookingRepository
+                .findById(id)
+                .orElseThrow(() -> new BookingNotFoundException("Booking with such id does not exist"));
 
 
         if (updateBooking.getUserId() > 0) {

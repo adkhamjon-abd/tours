@@ -1,14 +1,10 @@
 package org.example.repository;
 
 import org.example.model.Booking;
-import org.example.model.User;
-import org.example.response.ApiResponse;
+
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class BookingRepository {
@@ -31,13 +27,13 @@ public class BookingRepository {
         return booking;
     }
 
-    public Booking findById(int id) {
+    public Optional<Booking> findById(int id) {
         for(Booking current : bookings.values()){
             if (current.getId() == id){
-                return current;
+                return Optional.of(current);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     public List<Booking> findByUserId(int id) {
