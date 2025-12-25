@@ -3,10 +3,7 @@ package org.example.repository;
 import org.example.model.Company;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class CompanyRepository {
@@ -27,8 +24,10 @@ public class CompanyRepository {
         return company;
     }
 
-    public Company findById(int id){
-        return companies.get(id);
+    public Optional<Company> findById(int id){
+        Company company = companies.get(id);
+        Optional<Company> opt = Optional.ofNullable(company);
+        return opt;
     }
 
     public List<Company> findAll() {
