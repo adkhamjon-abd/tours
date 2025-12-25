@@ -15,6 +15,12 @@ public class GlolbalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
+    @ExceptionHandler(BookingAlreadyExistsException.class)
+    public ResponseEntity<ApiResponse<String>> bookingAlreadyExistsException(BookingAlreadyExistsException bookingAlreadyExistsException){
+        ApiResponse<String> response = new ApiResponse<>(bookingAlreadyExistsException.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ApiResponse<String>> userNotFoundException(UserNotFoundException userNotFoundException){
         ApiResponse<String> response = new ApiResponse<>(userNotFoundException.getMessage());
