@@ -22,16 +22,20 @@ public class TourService {
     }
 
     public Tour createTour(Tour tour) {
-        Tour created = tourRepository.findById(tour.getId()).orElseThrow(() ->
-                new TourNotFoundException("Tour with such id does not exist")
-        );
+        tourRepository.findById(tour.getId())
+                .ifPresent(t -> {
+                    throw new TourAlreadyExistsException(
+                            "Tour with this id already exists"
+                    );
+                });
 
 
         companyRepository.findById(tour.getCompanyId()).orElseThrow(
                 () -> new CompanyNotFoundException("Company with such id does not exist")
         );
+
         //companyid and id
-        return created;
+        return tourRepository.save(tour);
     }
 
     public Tour getById(int id) {
@@ -71,9 +75,6 @@ public class TourService {
         Tour existingTour = tourRepository.findById(id).orElseThrow(() ->
                 new TourNotFoundException("Tour with such id does not exist")
         );
-
-        if (existingTour == null) throw new TourNotFoundException("Tour with such id does not exist");
-
         existingTour.setName(updateTour.getName());
         existingTour.setCompanyId(updateTour.getCompanyId());
         existingTour.setViewCount(updateTour.getViewCount());
