@@ -21,6 +21,12 @@ public class GlolbalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
+    @ExceptionHandler(InvalidBookingDataException.class)
+    public ResponseEntity<ApiResponse<String>> InvalidBookingDataException(InvalidBookingDataException invalidBookingDataException){
+        ApiResponse<String> response = new ApiResponse<>(invalidBookingDataException.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ApiResponse<String>> userNotFoundException(UserNotFoundException userNotFoundException){
         ApiResponse<String> response = new ApiResponse<>(userNotFoundException.getMessage());
