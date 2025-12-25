@@ -40,7 +40,11 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    public User getById(int id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with such id does not exist"));
 
+        return user;
+    }
 
     public User updateUser(int id, User user) {
         User existingUser = userRepository.findById(id)
