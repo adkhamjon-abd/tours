@@ -3,10 +3,7 @@ package org.example.repository;
 import org.example.model.User;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class UserRepository {
@@ -24,23 +21,24 @@ public class UserRepository {
         return user;
     }
 
-    public User findByUsername(String userName){
-        User user = users.values().stream()
-                .filter(user1 -> user1.getUsername().equals(userName))
-                .toList().get(0);
-
-        return user;
-    }
+//    public Optional<User> findByUsername(String userName){
+//        User user = users.values().stream()
+//                .filter(user1 -> user1.getUsername().equals(userName))
+//                .toList().get(0);
+//
+//        return Optional.ofNullable(user);
+//    }
 
     public List<User> findAll() {
         return new ArrayList<>(users.values());
     }
 
-    public User findById(int id){
-        return users.values().stream()
+    public Optional<User> findById(int id){
+        User user = users.values().stream()
                 .filter(u -> u.getId() == id)
                 .findFirst()
                 .orElse(null);
+        return Optional.ofNullable(user);
     }
 
 

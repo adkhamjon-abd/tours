@@ -32,11 +32,8 @@ public class BookingService {
 
     public Booking createBooking(Booking booking) {
 
-        User user = userRepository.findById(booking.getUserId());
-
-        if (user == null) {
-            throw new UserNotFoundException("User with such id does not exist");
-        }
+        User user = userRepository.findById(booking.getUserId())
+                .orElseThrow(() -> new UserNotFoundException("User with such id does not exist"));
 
         Tour tour = tourRepository.findById(booking.getTourId());
 
@@ -65,10 +62,7 @@ public class BookingService {
     }
 
     public List<Booking> getBookingByUserId(int id) {
-        User user  = userRepository.findById(id);
-        if (user == null){
-            throw new UserNotFoundException("User with such id does not exist");
-        }
+        User user  = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with such id does not exist"));
         List<Booking> bookings = bookingRepository.findByUserId(id);
 
         return bookings;
@@ -113,9 +107,7 @@ public class BookingService {
 
 
         if (updateBooking.getUserId() > 0) {
-            if (userRepository.findById(updateBooking.getUserId()) == null) {
-                throw new UserNotFoundException("User with such Id does not exist");
-            }
+            userRepository.findById(updateBooking.getUserId()).orElseThrow(() -> new UserNotFoundException("User with such id does not exist"));
             existing.setUserId(updateBooking.getUserId());
         }
 

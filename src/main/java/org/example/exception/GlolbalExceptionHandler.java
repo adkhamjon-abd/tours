@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlolbalExceptionHandler {
-
     @ExceptionHandler(BookingNotFoundException.class)
     public ResponseEntity<ApiResponse<String>> bookingNotFoundException(BookingNotFoundException bookingNotFoundException){
         ApiResponse<String> response = new ApiResponse<>(bookingNotFoundException.getMessage());

@@ -8,6 +8,7 @@ import org.example.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -20,10 +21,11 @@ public class UserService {
 
     public User createUser(User user) {
 
-        User existing = userRepository.findById(user.getId());
-        if (existing != null){
-            throw new UserAlreadyExistsException("User already exists");
-        }
+         userRepository.findById(user.getId())
+                .ifPresent(u -> {
+                    throw new UserAlreadyExistsException("User already exists");
+                });
+
         return userRepository.save(user);
     }
 
@@ -32,29 +34,17 @@ public class UserService {
     }
 
     public void deleteUser(int id) {
-        User user = userRepository.findById(id);
-        if (user == null){
-            throw new UserNotFoundException("User with such id does not exist");
-        }
+        userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User with such id does not exist"));
+
         userRepository.deleteById(id);
     }
 
-    public User getById(int id) {
-        User user = userRepository.findById(id);
 
-        if (user == null) {
-            throw new UserNotFoundException("User with such id does not exist");
-        }
-
-        return userRepository.findById(id);
-    }
 
     public User updateUser(int id, User user) {
-        User existingUser = userRepository.findById(id);
-
-        if (existingUser == null) {
-            return null;
-        }
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User with such id does not exist"));
 
         existingUser.setUsername(user.getUsername());
         existingUser.setPassword(user.getPassword());
@@ -63,9 +53,8 @@ public class UserService {
     }
 
     public User patchUser(int id, User updateUser) {
-        User existingUser = userRepository.findById(id);
-
-        if (existingUser == null) {return null;}
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User with such id does not exist"));
 
         if (updateUser.getUsername() != null) {
             existingUser.setUsername(updateUser.getUsername());
