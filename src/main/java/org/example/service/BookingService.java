@@ -1,9 +1,6 @@
 package org.example.service;
 
-import org.example.exception.BookingAlreadyExistsException;
-import org.example.exception.BookingNotFoundException;
-import org.example.exception.InvalidBookingDataException;
-import org.example.exception.UserNotFoundException;
+import org.example.exception.*;
 import org.example.model.Booking;
 import org.example.model.Tour;
 import org.example.model.User;
@@ -31,17 +28,20 @@ public class BookingService {
 
 
     public Booking createBooking(Booking booking) {
-
-        User user = userRepository.findById(booking.getUserId())
+        //Check user
+        User user = userRepository
+                .findById(booking.getUserId())
                 .orElseThrow(() -> new UserNotFoundException("User with such id does not exist"));
 
-        Tour tour = tourRepository.findById(booking.getTourId());
+        //Check tour
+        tourRepository.findById(booking.getTourId()).orElseThrow(() ->
+                new TourNotFoundException("Tour with such id does not exist")
+        );
 
-        if (tour == null) {
-            throw new UserNotFoundException("Failed to create booking");
-        }
-
-        boolean booked = bookingRepository.findByUserId(user.getId()).stream().anyMatch(b -> b.getTourId() == booking.getTourId());
+        boolean booked = bookingRepository
+                .findByUserId(user.getId())
+                .stream()
+                .anyMatch(b -> b.getTourId() == booking.getTourId());
 
         if (booked){
             throw new BookingAlreadyExistsException("Booking already exists");
@@ -107,14 +107,17 @@ public class BookingService {
 
 
         if (updateBooking.getUserId() > 0) {
-            userRepository.findById(updateBooking.getUserId()).orElseThrow(() -> new UserNotFoundException("User with such id does not exist"));
+            userRepository
+                    .findById(updateBooking.getUserId())
+                    .orElseThrow(() -> new UserNotFoundException("User with such id does not exist"));
             existing.setUserId(updateBooking.getUserId());
         }
 
         if (updateBooking.getTourId() > 0) {
-            if (tourRepository.findById(updateBooking.getTourId()) == null) {
-                throw new UserNotFoundException("Tour with such Id does not exist");
-            }
+            tourRepository
+                    .findById(updateBooking.getTourId())
+                    .orElseThrow(() -> new TourNotFoundException("Tour with such Id does not exist"));
+
             existing.setTourId(updateBooking.getTourId());
         }
 

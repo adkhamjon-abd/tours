@@ -5,10 +5,7 @@ import org.example.model.User;
 import org.example.service.UserService;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
@@ -29,16 +26,10 @@ public class TourRepository {
         return tour;
     }
 
-    public Tour findById(int id){
-        Tour tour = tours.values().stream()
+    public Optional<Tour> findById(int id){
+        return tours.values().stream()
                 .filter(u -> u.getId() == id)
-                .findFirst()
-                .orElse(null);
-        if (tour == null){
-            return null;
-        }
-        tour.setViewCount(tour.getViewCount() + 1);
-        return tour;
+                .findFirst();
     }
 
     public List<Tour> findByCompanyId(int companyId){
