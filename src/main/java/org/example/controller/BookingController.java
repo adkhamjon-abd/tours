@@ -18,56 +18,52 @@ import java.util.List;
 @RequestMapping("/bookings")
     public class BookingController {
 
-    private final BookingRepository bookingRepository;
-    private final UserRepository userRepository;
-    private final TourRepository tourRepository;
     private final BookingService bookingService;
-    private final UserService userService;
 
-    public BookingController(BookingRepository bookingRepository,
-                             UserRepository userRepository,
-                             TourRepository tourRepository,
-                             BookingService bookingService,
-                             UserService userService){
-        this.bookingRepository = bookingRepository;
-        this.userRepository = userRepository;
-        this.tourRepository = tourRepository;
+    public BookingController(BookingService bookingService){
         this.bookingService = bookingService;
-        this.userService = userService;
     }
 
     @PostMapping
     public ResponseEntity<ApiResponse<Booking>> createBooking(@RequestBody Booking booking){
-        return bookingService.createBooking(booking);
+        Booking createdBooking = bookingService.createBooking(booking);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(createdBooking));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<Booking>> getBooking(@PathVariable("id") int id) {
-        return bookingService.getBooking(id);
+        Booking booking = bookingService.getBooking(id);
+        return ResponseEntity.ok(new ApiResponse<>(booking));
     }
 
     @GetMapping("/users/{id}")
     public ResponseEntity<ApiResponse<List<Booking>>> getBookingsByUserId(@PathVariable("id") int id) {
-        return bookingService.getBookingByUserId(id);
+        List<Booking> bookings = bookingService.getBookingByUserId(id);
+        return ResponseEntity.ok(new ApiResponse<>(bookings));
     }
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<Booking>>> getAllBookings() {
-        return bookingService.getAllBookings();
+        List<Booking> bookings = bookingService.getAllBookings();
+        return ResponseEntity.ok(new ApiResponse<>(bookings));
+
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBooking(@PathVariable("id") int id) {
-        return bookingService.deleteBooking(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<Booking>> updateBooking(@PathVariable("id") int id, @RequestBody Booking updateBooking) {
-        return bookingService.updateBooking(id, updateBooking);
+        Booking booking = bookingService.updateBooking(id, updateBooking);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(booking));
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<ApiResponse<Booking>> patchBooking(@PathVariable("id") int id, @RequestBody Booking updateBooking) {
-        return bookingService.patchBooking(id, updateBooking);
+        Booking booking = bookingService.patchBooking(id, updateBooking);
+        return ResponseEntity.ok(new ApiResponse<>(booking));
+
     }
 }
