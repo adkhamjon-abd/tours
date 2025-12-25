@@ -3,8 +3,10 @@ package org.example.service;
 import org.example.exception.RatingAlreadyExistsException;
 import org.example.exception.RatingNotFoundException;
 import org.example.exception.RatingScoreOutOfRangeException;
+import org.example.exception.TourNotFoundException;
 import org.example.model.Rating;
 import org.example.repository.RatingRepository;
+import org.example.repository.TourRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +16,11 @@ import java.util.List;
 public class RatingService {
 
     private RatingRepository ratingRepository;
+    private TourRepository tourRepository;
 
-    public RatingService(RatingRepository ratingRepository){
+    public RatingService(RatingRepository ratingRepository, TourRepository tourRepository){
         this.ratingRepository = ratingRepository;
+        this.tourRepository = tourRepository;
     }
 
     private Double fingAverageRatingByTourId(int id) {
@@ -34,11 +38,15 @@ public class RatingService {
     }
 
     public Rating createRating(Rating rating) {
-        Rating existing = ratingRepository.findById(rating.getId());
-
-        if (existing != null) {
-            throw new RatingAlreadyExistsException("Rating with such id already exists");
-        }
+        ratingRepository.findById(rating.getId())
+                .ifPresent(r -> {
+                    throw new RatingAlreadyExistsException(
+                            "Rating with such id already exists"
+                    );
+                });
+        tourRepository
+                .findById(rating.getTourId())
+                .orElseThrow(() -> new TourNotFoundException("Tour with such id does not exist"));
         return ratingRepository.save(rating);
     }
 
@@ -51,29 +59,25 @@ public class RatingService {
     }
 
     public Rating getRatingById(int id) {
-        Rating rating = ratingRepository.findById(id);
+        Rating rating = ratingRepository
+                .findById(id)
+                .orElseThrow(() -> new RatingAlreadyExistsException("Rating with such id does not exist"));
 
-        if (rating == null){
-            throw new RatingNotFoundException("Rating with such id does not exist");
-        }
-
-        return ratingRepository.findById(id);
+        return rating;
     }
 
     public void deleteRating(int id) {
-        Rating existing = ratingRepository.findById(id);
-        if (existing == null) {
-            throw new RatingNotFoundException("Rating with such id does not exist");
-        }
+        Rating rating = ratingRepository
+                .findById(id)
+                .orElseThrow(() -> new RatingAlreadyExistsException("Rating with such id does not exist"));
         ratingRepository.deleteById(id);
     }
 
     public Rating updateRating(int id, Rating updateRating) {
-        Rating rating = ratingRepository.findById(id);
+        Rating rating = ratingRepository
+                .findById(id)
+                .orElseThrow((()-> new RatingNotFoundException("Rating with such id does not exist")));
 
-        if (rating == null){
-            throw new RatingNotFoundException("Rating with such id does not exist");
-        }
 
         rating.setUserId(updateRating.getUserId());
         rating.setTourId(updateRating.getTourId());
@@ -88,11 +92,9 @@ public class RatingService {
     }
 
     public Rating patchRating(int id, Rating patchRating) {
-        Rating rating = ratingRepository.findById(id);
-
-        if (rating == null) {
-            throw new RatingNotFoundException("Rating with such id does not exist");
-        }
+        Rating rating = ratingRepository
+                .findById(id)
+                .orElseThrow(() -> new RatingNotFoundException("Rating with such id does not exist"));
 
         if (patchRating.getUserId() > 0){
 

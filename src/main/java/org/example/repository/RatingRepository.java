@@ -5,10 +5,7 @@ import org.example.model.Tour;
 import org.example.model.User;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class RatingRepository {
@@ -66,11 +63,10 @@ public class RatingRepository {
         return String.valueOf(avarege);
     }
 
-    public Rating findById(int id) {
+    public Optional<Rating> findById(int id) {
         return ratings.values().stream()
                 .filter(r -> r.getId() == id)
-                .findFirst()
-                .orElse(null);
+                .findFirst();
 
     }
 
