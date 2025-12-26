@@ -1,8 +1,6 @@
 package org.example.repository;
 
 import org.example.model.Tour;
-import org.example.model.User;
-import org.example.service.UserService;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;

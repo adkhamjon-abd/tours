@@ -2,7 +2,7 @@ package org.example.controller;
 
 import org.example.model.User;
 import org.example.response.ApiResponse;
-import org.example.service.UserService;
+import org.example.service.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +14,9 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
-    public UserController(UserService userService){
+    public UserController(UserServiceImpl userService){
         this.userService =  userService;
     }
 

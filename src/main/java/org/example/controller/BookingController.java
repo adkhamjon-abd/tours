@@ -1,13 +1,8 @@
 package org.example.controller;
 
 import org.example.model.Booking;
-import org.example.model.User;
-import org.example.repository.BookingRepository;
-import org.example.repository.TourRepository;
-import org.example.repository.UserRepository;
 import org.example.response.ApiResponse;
 import org.example.service.abstractions.BookingService;
-import org.example.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
