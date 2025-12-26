@@ -6,19 +6,20 @@ import org.example.model.User;
 import org.example.repository.BookingRepository;
 import org.example.repository.TourRepository;
 import org.example.repository.UserRepository;
+import org.example.service.abstractions.BookingService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class BookingService {
+public class BookingServiceImpl implements BookingService {
 
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
     private final TourRepository tourRepository;
 
-    public BookingService(BookingRepository bookingRepository,
+    public BookingServiceImpl(BookingRepository bookingRepository,
                           UserRepository userRepository,
                           TourRepository tourRepository) {
         this.bookingRepository = bookingRepository;
