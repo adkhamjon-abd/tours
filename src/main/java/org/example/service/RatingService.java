@@ -61,7 +61,7 @@ public class RatingService {
     public Rating getRatingById(int id) {
         Rating rating = ratingRepository
                 .findById(id)
-                .orElseThrow(() -> new RatingAlreadyExistsException("Rating with such id does not exist"));
+                .orElseThrow(() -> new RatingNotFoundException("Rating with such id does not exist"));
 
         return rating;
     }
