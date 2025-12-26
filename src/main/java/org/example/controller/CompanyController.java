@@ -3,7 +3,7 @@
     import org.example.model.Company;
     import org.example.repository.CompanyRepository;
     import org.example.response.ApiResponse;
-    import org.example.service.CompanyService;
+    import org.example.service.abstractions.CompanyService;
     import org.springframework.http.HttpStatus;
     import org.springframework.http.ResponseEntity;
     import org.springframework.web.bind.annotation.*;

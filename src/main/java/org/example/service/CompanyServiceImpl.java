@@ -4,16 +4,17 @@ import org.example.exception.CompanyAlreadyExistsException;
 import org.example.exception.CompanyNotFoundException;
 import org.example.model.Company;
 import org.example.repository.CompanyRepository;
+import org.example.service.abstractions.CompanyService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class CompanyService {
+public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyRepository companyRepository;
 
-    public CompanyService(CompanyRepository companyRepository) {
+    public CompanyServiceImpl(CompanyRepository companyRepository) {
         this.companyRepository = companyRepository;
 
     }
