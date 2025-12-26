@@ -1,4 +1,4 @@
-package org.example.service;
+package org.example.service.impl;
 
 import org.example.exception.CompanyAlreadyExistsException;
 import org.example.exception.CompanyNotFoundException;

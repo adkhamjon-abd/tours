@@ -1,4 +1,4 @@
-package org.example.service;
+package org.example.service.impl;
 
 import org.example.exception.UserAlreadyExistsException;
 import org.example.exception.UserNotFoundException;

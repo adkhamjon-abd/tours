@@ -3,7 +3,7 @@ package org.example.controller;
 import org.example.model.Tour;
 import org.example.repository.CompanyRepository;
 import org.example.response.ApiResponse;
-import org.example.service.TourServiceImpl;
+import org.example.service.impl.TourServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

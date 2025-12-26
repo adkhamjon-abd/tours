@@ -1,4 +1,4 @@
-package org.example.service;
+package org.example.service.impl;
 
 import org.example.exception.RatingAlreadyExistsException;
 import org.example.exception.RatingNotFoundException;

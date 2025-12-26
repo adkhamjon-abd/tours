@@ -2,7 +2,7 @@ package org.example.controller;
 
 import org.example.model.User;
 import org.example.response.ApiResponse;
-import org.example.service.UserServiceImpl;
+import org.example.service.impl.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

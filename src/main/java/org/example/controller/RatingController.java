@@ -2,7 +2,7 @@ package org.example.controller;
 
 import org.example.model.Rating;
 import org.example.response.ApiResponse;
-import org.example.service.RatingServiceImpl;
+import org.example.service.impl.RatingServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
