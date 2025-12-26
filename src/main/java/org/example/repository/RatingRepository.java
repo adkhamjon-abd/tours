@@ -13,8 +13,6 @@ public class RatingRepository {
     private final Map<Integer, Rating> ratings = new HashMap<>();
     private int nextId = 6;
 
-    private final TourRepository tourRepository;
-    private final UserRepository userRepository;
     public RatingRepository(TourRepository tourRepository, UserRepository userRepository) {
         ratings.put(1, new Rating(1, 1, 1, 4));
         ratings.put(2, new Rating(2, 2, 1, 3));
@@ -22,8 +20,6 @@ public class RatingRepository {
         ratings.put(4, new Rating(4, 4, 1, 5));
         ratings.put(5, new Rating(5, 5, 1, 5));
 
-        this.tourRepository = tourRepository;
-        this.userRepository = userRepository;
     }
 
     public Rating save(Rating rating){
@@ -46,21 +42,6 @@ public class RatingRepository {
 
     public List<Rating> findAll(){
         return new ArrayList<>(ratings.values());
-    }
-
-    public String fingAverageRatingByTourId(int id) {
-        double totalScore = 0;
-        double numberOfScores = 0;
-        for (Rating rating : ratings.values()){
-            if (rating.getTourId() == id){
-                totalScore += rating.getScore();
-                numberOfScores += 1;
-            }
-        }
-
-        double avarege = totalScore / numberOfScores;
-
-        return String.valueOf(avarege);
     }
 
     public Optional<Rating> findById(int id) {
