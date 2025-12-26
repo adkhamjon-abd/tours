@@ -7,23 +7,23 @@ import org.example.exception.TourNotFoundException;
 import org.example.model.Rating;
 import org.example.repository.RatingRepository;
 import org.example.repository.TourRepository;
-import org.springframework.http.ResponseEntity;
+import org.example.service.abstractions.RatingService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class RatingService {
+public class RatingServiceImpl implements RatingService {
 
     private RatingRepository ratingRepository;
     private TourRepository tourRepository;
 
-    public RatingService(RatingRepository ratingRepository, TourRepository tourRepository){
+    public RatingServiceImpl(RatingRepository ratingRepository, TourRepository tourRepository){
         this.ratingRepository = ratingRepository;
         this.tourRepository = tourRepository;
     }
 
-    private Double fingAverageRatingByTourId(int id) {
+    private Double findAverageRatingByTourId(int id) {
         double totalScore = 0;
         double numberOfScores = 0;
         List<Rating> ratings = ratingRepository.findAll();
@@ -55,7 +55,7 @@ public class RatingService {
     }
 
     public Double getAverageRatingByTourId(int id) {
-        return fingAverageRatingByTourId(id);
+        return findAverageRatingByTourId(id);
     }
 
     public Rating getRatingById(int id) {

@@ -1,9 +1,8 @@
 package org.example.controller;
 
 import org.example.model.Rating;
-import org.example.repository.RatingRepository;
 import org.example.response.ApiResponse;
-import org.example.service.RatingService;
+import org.example.service.RatingServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +12,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/ratings")
 public class RatingController {
-    private final RatingService ratingService;
-    public RatingController(RatingService ratingService){
+    private final RatingServiceImpl ratingService;
+    public RatingController(RatingServiceImpl ratingService){
         this.ratingService =  ratingService;
     }
 
