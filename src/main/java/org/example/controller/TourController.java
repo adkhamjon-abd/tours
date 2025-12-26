@@ -3,7 +3,7 @@ package org.example.controller;
 import org.example.model.Tour;
 import org.example.repository.CompanyRepository;
 import org.example.response.ApiResponse;
-import org.example.service.TourService;
+import org.example.service.TourServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +14,9 @@ import java.util.List;
 @RequestMapping("/tours")
 public class TourController {
     private final CompanyRepository companyRepository;
-    private final TourService tourService;
+    private final TourServiceImpl tourService;
 
-    public TourController(CompanyRepository companyRepository, TourService tourService){
+    public TourController(CompanyRepository companyRepository, TourServiceImpl tourService){
         this.companyRepository = companyRepository;
         this.tourService = tourService;
     }

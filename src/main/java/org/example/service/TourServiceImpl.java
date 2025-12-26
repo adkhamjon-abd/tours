@@ -6,17 +6,18 @@ import org.example.exception.TourNotFoundException;
 import org.example.model.Tour;
 import org.example.repository.CompanyRepository;
 import org.example.repository.TourRepository;
+import org.example.service.abstractions.TourService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class TourService {
+public class TourServiceImpl implements TourService {
 
     private final TourRepository tourRepository;
     private final CompanyRepository companyRepository;
 
-    public TourService(TourRepository tourRepository, CompanyRepository companyRepository){
+    public TourServiceImpl(TourRepository tourRepository, CompanyRepository companyRepository){
         this.tourRepository = tourRepository;
         this.companyRepository = companyRepository;
     }
