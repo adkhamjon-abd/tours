@@ -8,6 +8,7 @@ import org.example.repository.TourRepository;
 import org.example.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -37,8 +38,8 @@ public class BookingService {
                 new TourNotFoundException("Tour with such id does not exist")
         );
 
-        boolean booked = bookingRepository
-                .findByUserId(user.getId())
+        boolean booked =
+                getBookingByUserId(user.getId())
                 .stream()
                 .anyMatch(b -> b.getTourId() == booking.getTourId());
 
@@ -62,9 +63,15 @@ public class BookingService {
 
     public List<Booking> getBookingByUserId(int id) {
         User user  = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with such id does not exist"));
-        List<Booking> bookings = bookingRepository.findByUserId(id);
 
-        return bookings;
+        List<Booking> bookings = bookingRepository.findAll();
+        List<Booking> idBookings = new ArrayList<>();
+        for(Booking current : bookings){
+            if (current.getUserId() == id){
+                idBookings.add(current);
+            }
+        }
+        return idBookings;
     }
 
     public List<Booking> getAllBookings() {

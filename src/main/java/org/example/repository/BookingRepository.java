@@ -36,16 +36,6 @@ public class BookingRepository {
         return Optional.empty();
     }
 
-    public List<Booking> findByUserId(int id) {
-        List<Booking> idBookings = new ArrayList<>();
-        for(Booking current : bookings.values()){
-            if (current.getUserId() == id){
-                idBookings.add(current);
-            }
-        }
-        return idBookings;
-    }
-
     public List<Booking> findAll(){
         List<Booking> idBookings = new ArrayList<>();
         idBookings.addAll(bookings.values());
