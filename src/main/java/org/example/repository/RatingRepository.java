@@ -12,16 +12,8 @@ import java.util.*;
 @Repository
 public class RatingRepository {
 
-    private final Map<Integer, Rating> ratings = new HashMap<>();
-    private int nextId = 6;
 
-    public RatingRepository(TourRepository tourRepository, UserRepository userRepository) {
-        ratings.put(1, new Rating(1, 1, 1, 4));
-        ratings.put(2, new Rating(2, 2, 1, 3));
-        ratings.put(3, new Rating(3, 3, 1, 4));
-        ratings.put(4, new Rating(4, 4, 1, 5));
-        ratings.put(5, new Rating(5, 5, 1, 5));
-
+    public RatingRepository() {
     }
 
     public Rating save(Rating rating){
