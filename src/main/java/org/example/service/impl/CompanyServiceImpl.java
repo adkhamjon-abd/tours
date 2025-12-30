@@ -26,8 +26,10 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     public Company createCompany(Company company) {
-        Company existing = companyRepository.findById(company.getId())
-                .orElseThrow(() -> new CompanyAlreadyExistsException("Company with such id already exists"));
+        companyRepository.findById(company.getId())
+                .ifPresent(c -> {
+                    throw new CompanyAlreadyExistsException("Company with such id already exists");
+                });
 
         return companyRepository.save(company);
     }
