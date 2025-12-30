@@ -1,7 +1,11 @@
 package org.example.repository;
 
+import org.example.config.HibernateUtil;
 import org.example.model.Booking;
 
+import org.example.model.User;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -19,35 +23,88 @@ public class BookingRepository {
     }
 
     public Booking save(Booking booking){
-        int userId = booking.getUserId();
-        int tourId = booking.getTourId();
-
-        booking.setId(nextId++);
-        bookings.put(booking.getId(), booking);
-        return booking;
+        Session session = null;
+        Transaction tx = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            tx = session.beginTransaction();
+            session.persist(booking);
+            tx.commit();
+            return booking;
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            throw e;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
     }
 
     public Optional<Booking> findById(int id) {
-        for(Booking current : bookings.values()){
-            if (current.getId() == id){
-                return Optional.of(current);
-            }
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return Optional.ofNullable(session.find(Booking.class, id));
         }
-        return Optional.empty();
     }
 
     public List<Booking> findAll(){
-        List<Booking> idBookings = new ArrayList<>();
-        idBookings.addAll(bookings.values());
-        return idBookings;
+        Session session = null;
+
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            return session.createQuery("FROM Booking", Booking.class).list();
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
     }
 
     public void deleteById(int id) {
-        bookings.entrySet().removeIf(entry -> entry.getValue().getId() == id);
+        Session session = null;
+        Transaction tx = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            tx = session.beginTransaction();
+            session.createQuery(
+                            "DELETE FROM Booking b WHERE b.id = :id")
+                    .setParameter("id", id)
+                    .executeUpdate();
+            tx.commit();
+
+        }catch (Exception e) {
+            if (tx != null) tx.rollback();
+            throw e;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
     }
 
-    public void update(Booking booking) {
-        bookings.put(booking.getId(), booking);
+    public void update(Booking exisiting) {
+        Session session = null;
+        Transaction tx = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            tx = session.beginTransaction();
+
+            Booking booking = session.find(Booking.class, exisiting.getId());
+            if (booking != null) {
+                booking.setUserId(exisiting.getUserId());
+                booking.setTourId(exisiting.getTourId());
+            }
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            throw e;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
     }
 }
 
