@@ -10,12 +10,7 @@ import java.util.*;
 
 @Repository
 public class UserRepository{
-    private Map<Integer, User> users = new HashMap<>();
-    private int nextId = 2;
 
-//    public UserRepository(){
-//        users.put(1, new User(1, "admin", "admin"));
-//    }
     public UserRepository(){
 
     }
@@ -81,8 +76,6 @@ public class UserRepository{
                 session.close();
             }
         }
-        users.entrySet().removeIf(entry -> entry.getValue().getId() == id);
-
     }
 
     public User update(User existingUser) {
