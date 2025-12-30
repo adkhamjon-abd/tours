@@ -1,8 +1,10 @@
 package org.example.repository;
 
+import org.example.config.HibernateUtil;
 import org.example.model.Rating;
-import org.example.model.Tour;
 import org.example.model.User;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -24,38 +26,94 @@ public class RatingRepository {
 
     public Rating save(Rating rating){
 
-        for (Map.Entry<Integer, Rating> existingEntry : ratings.entrySet()){
-            Integer key = existingEntry.getKey();
-            Rating value = existingEntry.getValue();
+        Session session = null;
+        Transaction tx = null;
 
-            //When user tries to create Rating with same id then score is updated
-            if (value.getTourId() == rating.getTourId() && value.getUserId() == rating.getUserId()){
-                value.setScore(rating.getScore());
-                ratings.put(key, value);
-                return value;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            tx = session.beginTransaction();
+            session.persist(rating);
+            tx.commit();
+            return rating;
+
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            throw e;
+        } finally {
+            if (session != null && session.isOpen()){
+                session.close();
             }
         }
-        rating.setId(nextId++);
-        ratings.put(rating.getId(), rating);
-        return rating;
+
+
     }
 
     public List<Rating> findAll(){
-        return new ArrayList<>(ratings.values());
+        Session session = null;
+
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            return session.createQuery("FROM Rating", Rating.class).list();
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
     }
 
     public Optional<Rating> findById(int id) {
-        return ratings.values().stream()
-                .filter(r -> r.getId() == id)
-                .findFirst();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return Optional.ofNullable(session.find(Rating.class, id));
+        }
 
     }
 
     public void deleteById(int id) {
-        ratings.values().removeIf(rating -> rating.getId() == id);
+        Session session = null;
+        Transaction tx = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            tx = session.beginTransaction();
+            session.createQuery(
+                            "DELETE FROM Rating r WHERE r.id = :id")
+                    .setParameter("id", id)
+                    .executeUpdate();
+            tx.commit();
+
+        }catch (Exception e) {
+            if (tx != null) tx.rollback();
+            throw e;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
     }
 
     public void update(Rating updateRating){
-        ratings.put(updateRating.getId(), updateRating);
+        Session session = null;
+        Transaction tx = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            tx = session.beginTransaction();
+
+            Rating rating = session.find(Rating.class, updateRating.getId());
+            if (rating != null) {
+                rating.setUserId(updateRating.getUserId());
+                rating.setTourId(updateRating.getTourId());
+                rating.setScore(updateRating.getScore());
+            }
+
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            throw e;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
     }
 }
