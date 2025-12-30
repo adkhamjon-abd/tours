@@ -58,12 +58,6 @@ public class UserRepository{
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return Optional.ofNullable(session.find(User.class, id));
         }
-
-//        User user = users.values().stream()
-//                .filter(u -> u.getId() == id)
-//                .findFirst()
-//                .orElse(null);
-//        return Optional.ofNullable(user);
     }
 
 
