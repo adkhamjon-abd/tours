@@ -1,6 +1,10 @@
 package org.example.repository;
 
+import org.example.config.HibernateUtil;
 import org.example.model.Company;
+import org.example.model.User;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -19,26 +23,87 @@ public class CompanyRepository {
     }
     public Company save(Company company){
 
-        company.setId(nextId++);
-        companies.put(company.getId(), company);
-        return company;
+        Session session = null;
+        Transaction tx = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            tx = session.beginTransaction();
+            session.persist(company);
+            tx.commit();
+            return company;
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            throw e;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
     }
 
     public Optional<Company> findById(int id){
-        Company company = companies.get(id);
-        Optional<Company> opt = Optional.ofNullable(company);
-        return opt;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return Optional.ofNullable(session.find(Company.class, id));
+        }
     }
 
     public List<Company> findAll() {
-        return new ArrayList<>(companies.values());
+        Session session = null;
+
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            return session.createQuery("FROM Company", Company.class).list();
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
     }
 
     public void deleteById(int id) {
-        companies.entrySet().removeIf(entry -> entry.getValue().getId() == id);
+        Session session = null;
+        Transaction tx = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            tx = session.beginTransaction();
+            session.createQuery(
+                            "DELETE FROM Rating r WHERE r.id = :id")
+                    .setParameter("id", id)
+                    .executeUpdate();
+            tx.commit();
+
+        }catch (Exception e) {
+            if (tx != null) tx.rollback();
+            throw e;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
     }
 
-    public void update(Company company) {
-        companies.put(company.getId(), company);
+    public void update(Company existing) {
+        Session session = null;
+        Transaction tx = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            tx = session.beginTransaction();
+
+            Company company = session.find(Company.class, existing.getId());
+            if (company != null) {
+                company.setName(existing.getName());
+            }
+
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            throw e;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
     }
 }
