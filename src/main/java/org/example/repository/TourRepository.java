@@ -12,14 +12,8 @@ import java.util.stream.Collectors;
 
 @Repository
 public class TourRepository {
-    private final Map<Integer, Tour> tours = new HashMap<>();
-    private int nextId = 6;
+
     public TourRepository() {
-        tours.put(1, new Tour(1, "Dubai", 1, 0));
-        tours.put(2, new Tour(2, "Italy", 2, 0));
-        tours.put(3, new Tour(3, "Turikye", 3, 0));
-        tours.put(4, new Tour(4, "France", 4, 0));
-        tours.put(5, new Tour(5, "Malaysia", 5, 0));
     }
 
     public Tour save(Tour tour){
@@ -112,5 +106,5 @@ public class TourRepository {
             }
         }
 
-        }
+    }
 }
