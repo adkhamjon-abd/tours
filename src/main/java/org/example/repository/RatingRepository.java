@@ -1,9 +1,8 @@
 package org.example.repository;
 
-import org.example.config.HibernateUtil;
 import org.example.model.Rating;
-import org.example.model.User;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
@@ -12,8 +11,10 @@ import java.util.*;
 @Repository
 public class RatingRepository {
 
+    private final SessionFactory sessionFactory;
 
-    public RatingRepository() {
+    public RatingRepository(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     public Rating save(Rating rating){
@@ -22,7 +23,7 @@ public class RatingRepository {
         Transaction tx = null;
 
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.openSession();
             tx = session.beginTransaction();
             session.persist(rating);
             tx.commit();
@@ -46,7 +47,7 @@ public class RatingRepository {
         Session session = null;
 
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.openSession();
             return session.createQuery("FROM Rating", Rating.class).list();
         } finally {
             if (session != null && session.isOpen()) {
@@ -56,7 +57,7 @@ public class RatingRepository {
     }
 
     public Optional<Rating> findById(int id) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             return Optional.ofNullable(session.find(Rating.class, id));
         }
 
@@ -66,7 +67,7 @@ public class RatingRepository {
         Session session = null;
         Transaction tx = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.openSession();
             tx = session.beginTransaction();
             session.createQuery(
                             "DELETE FROM Rating r WHERE r.id = :id")
@@ -88,7 +89,7 @@ public class RatingRepository {
         Session session = null;
         Transaction tx = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.openSession();
             tx = session.beginTransaction();
 
             Rating rating = session.find(Rating.class, updateRating.getId());
