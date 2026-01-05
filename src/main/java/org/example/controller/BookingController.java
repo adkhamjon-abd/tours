@@ -11,16 +11,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/bookings")
-    public class BookingController {
+public class BookingController {
 
     private final BookingService bookingService;
 
-    public BookingController(BookingService bookingService){
+    public BookingController(BookingService bookingService) {
         this.bookingService = bookingService;
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Booking>> createBooking(@RequestBody Booking booking){
+    public ResponseEntity<ApiResponse<Booking>> createBooking(@RequestBody Booking booking) {
         Booking createdBooking = bookingService.createBooking(booking);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(createdBooking));
     }
@@ -46,6 +46,7 @@ import java.util.List;
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBooking(@PathVariable("id") int id) {
+        bookingService.deleteBooking(id);
         return ResponseEntity.noContent().build();
     }
 
