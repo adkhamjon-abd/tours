@@ -6,7 +6,7 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return null;  // No additional root configurations needed (e.g., database setup, security)
+        return new Class[] { HibernateConfig.class };  // No additional root configurations needed (e.g., database setup, security)
     }
 
     @Override
