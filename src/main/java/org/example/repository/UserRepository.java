@@ -1,25 +1,27 @@
 package org.example.repository;
 
-import org.example.config.HibernateUtil;
 import org.example.model.User;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
 @Repository
-public class UserRepository{
+public class UserRepository {
 
-    public UserRepository(){
+    private final SessionFactory sessionFactory;
 
+    public UserRepository(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
-    public User save(User user){
+    public User save(User user) {
         Session session = null;
         Transaction tx = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.openSession();
             tx = session.beginTransaction();
             session.persist(user);
             tx.commit();
@@ -40,7 +42,7 @@ public class UserRepository{
         Session session = null;
 
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.openSession();
             return session.createQuery("FROM User", User.class).list();
         } finally {
             if (session != null && session.isOpen()) {
@@ -49,8 +51,8 @@ public class UserRepository{
         }
     }
 
-    public Optional<User> findById(int id){
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+    public Optional<User> findById(int id) {
+        try (Session session = sessionFactory.openSession()) {
             return Optional.ofNullable(session.find(User.class, id));
         }
     }
@@ -60,7 +62,7 @@ public class UserRepository{
         Session session = null;
         Transaction tx = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.openSession();
             tx = session.beginTransaction();
             session.createQuery(
                             "DELETE FROM User u WHERE u.id = :id")
@@ -68,7 +70,7 @@ public class UserRepository{
                     .executeUpdate();
             tx.commit();
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             if (tx != null) tx.rollback();
             throw e;
         } finally {
@@ -82,7 +84,7 @@ public class UserRepository{
         Session session = null;
         Transaction tx = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.openSession();
             tx = session.beginTransaction();
 
             User user = session.find(User.class, existingUser.getId());
