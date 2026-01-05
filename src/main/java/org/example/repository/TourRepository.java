@@ -1,19 +1,20 @@
 package org.example.repository;
 
-import org.example.config.HibernateUtil;
 import org.example.model.Tour;
-import org.example.model.User;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Repository
 public class TourRepository {
 
-    public TourRepository() {
+    private final SessionFactory sessionFactory;
+
+    public TourRepository(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     public Tour save(Tour tour){
@@ -21,7 +22,7 @@ public class TourRepository {
         Transaction tx = null;
 
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.openSession();
             tx = session.beginTransaction();
             session.persist(tour);
             tx.commit();
@@ -39,14 +40,14 @@ public class TourRepository {
     }
 
     public Optional<Tour> findById(int id){
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             return Optional.ofNullable(session.find(Tour.class, id));
         }
     }
 
     public List<Tour> findAll(){
         Transaction tx = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             tx = session.beginTransaction();
             List<Tour> tours = session.createQuery("FROM Tour", Tour.class).list();
             tx.commit();
@@ -61,7 +62,7 @@ public class TourRepository {
         Session session = null;
         Transaction tx = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.openSession();
             tx = session.beginTransaction();
             session.createQuery(
                             "DELETE FROM Tour t WHERE t.id = :id")
@@ -84,7 +85,7 @@ public class TourRepository {
         Transaction tx = null;
 
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.openSession();
             tx = session.beginTransaction();
 
             Tour existing = session.find(Tour.class, tour.getId());
