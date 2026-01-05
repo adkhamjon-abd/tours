@@ -2,9 +2,8 @@ package org.example.repository;
 
 import org.example.config.HibernateUtil;
 import org.example.model.Booking;
-
-import org.example.model.User;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
@@ -13,20 +12,18 @@ import java.util.*;
 @Repository
 public class BookingRepository {
 
-    private final UserRepository userRepository;
 
-    private final Map<Integer, Booking> bookings = new HashMap<>();
-    private int nextId = 2;
-    public BookingRepository(UserRepository userRepository){
-        bookings.put(1, new Booking(1, 1, 1));
-        this.userRepository = userRepository;
+    private final SessionFactory sessionFactory;
+
+    public BookingRepository(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
-    public Booking save(Booking booking){
+    public Booking save(Booking booking) {
         Session session = null;
         Transaction tx = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.openSession();
             tx = session.beginTransaction();
             session.persist(booking);
             tx.commit();
@@ -44,16 +41,16 @@ public class BookingRepository {
     }
 
     public Optional<Booking> findById(int id) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             return Optional.ofNullable(session.find(Booking.class, id));
         }
     }
 
-    public List<Booking> findAll(){
+    public List<Booking> findAll() {
         Session session = null;
 
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.openSession();
             return session.createQuery("FROM Booking", Booking.class).list();
         } finally {
             if (session != null && session.isOpen()) {
@@ -66,7 +63,7 @@ public class BookingRepository {
         Session session = null;
         Transaction tx = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.openSession();
             tx = session.beginTransaction();
             session.createQuery(
                             "DELETE FROM Booking b WHERE b.id = :id")
@@ -74,7 +71,7 @@ public class BookingRepository {
                     .executeUpdate();
             tx.commit();
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             if (tx != null) tx.rollback();
             throw e;
         } finally {
@@ -88,7 +85,7 @@ public class BookingRepository {
         Session session = null;
         Transaction tx = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.openSession();
             tx = session.beginTransaction();
 
             Booking booking = session.find(Booking.class, exisiting.getId());
