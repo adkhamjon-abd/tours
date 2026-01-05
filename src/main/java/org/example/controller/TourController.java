@@ -1,7 +1,6 @@
 package org.example.controller;
 
 import org.example.model.Tour;
-import org.example.repository.CompanyRepository;
 import org.example.response.ApiResponse;
 import org.example.service.impl.TourServiceImpl;
 import org.springframework.http.HttpStatus;
@@ -13,34 +12,32 @@ import java.util.List;
 @RestController
 @RequestMapping("/tours")
 public class TourController {
-    private final CompanyRepository companyRepository;
     private final TourServiceImpl tourService;
 
-    public TourController(CompanyRepository companyRepository, TourServiceImpl tourService){
-        this.companyRepository = companyRepository;
+    public TourController(TourServiceImpl tourService) {
         this.tourService = tourService;
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Tour>> createTour(@RequestBody Tour tour){
+    public ResponseEntity<ApiResponse<Tour>> createTour(@RequestBody Tour tour) {
         Tour created = tourService.createTour(tour);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(tour));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(created));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Tour>> getById(@PathVariable("id") int id){
+    public ResponseEntity<ApiResponse<Tour>> getById(@PathVariable("id") int id) {
         Tour tour = tourService.getById(id);
         return ResponseEntity.ok(new ApiResponse<>(tour));
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<Tour>>> getAll(){
+    public ResponseEntity<ApiResponse<List<Tour>>> getAll() {
         List<Tour> tours = tourService.getAll();
         return ResponseEntity.ok(new ApiResponse<>(tours));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteTour(@PathVariable("id") int id){
+    public ResponseEntity<ApiResponse<Void>> deleteTour(@PathVariable("id") int id) {
         tourService.deleteTour(id);
         return ResponseEntity.noContent().build();
     }
