@@ -16,18 +16,20 @@ public class UserController {
 
     private final UserServiceImpl userService;
 
-    public UserController(UserServiceImpl userService){
-        this.userService =  userService;
+    public UserController(UserServiceImpl userService) {
+        this.userService = userService;
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<User>> createUser(@RequestBody User user){
+    public ResponseEntity<ApiResponse<User>> createUser(@RequestBody User user) {
         User createdUser = userService.createUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(createdUser));
-    };
+    }
+
+    ;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<User>>> getAll(){
+    public ResponseEntity<ApiResponse<List<User>>> getAll() {
         List<User> users = userService.getAll();
         return ResponseEntity.ok().body(new ApiResponse<>(users));
     }
