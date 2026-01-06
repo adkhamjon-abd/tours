@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import org.example.dto.CompanyDTO;
 import org.example.model.Company;
 import org.example.response.ApiResponse;
 import org.example.service.abstractions.CompanyService;
@@ -20,20 +21,20 @@ public class CompanyController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Company>> getCompanyById(@PathVariable("id") int id) {
-        Company company = companyService.getCompanyById(id);
+    public ResponseEntity<ApiResponse<CompanyDTO>> getCompanyById(@PathVariable("id") int id) {
+        CompanyDTO company = companyService.getCompanyById(id);
         return ResponseEntity.ok(new ApiResponse<>(company));
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Company>> createCompany(@RequestBody Company company) {
-        Company created = companyService.createCompany(company);
+    public ResponseEntity<ApiResponse<CompanyDTO>> createCompany(@RequestBody Company company) {
+        CompanyDTO created = companyService.createCompany(company);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(created));
     }
 
     @GetMapping()
-    public ResponseEntity<ApiResponse<List<Company>>> getAll() {
-        List<Company> companies = companyService.getAllCompanies();
+    public ResponseEntity<ApiResponse<List<CompanyDTO>>> getAll() {
+        List<CompanyDTO> companies = companyService.getAllCompanies();
 
         return ResponseEntity.ok(new ApiResponse<>(companies));
     }
@@ -45,19 +46,19 @@ public class CompanyController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<Company>> updateCompany(
+    public ResponseEntity<ApiResponse<CompanyDTO>> updateCompany(
             @PathVariable("id") int id,
             @RequestBody Company updateCompany) {
-        Company existing = companyService.updateCompany(id, updateCompany);
+        CompanyDTO existing = companyService.updateCompany(id, updateCompany);
         return ResponseEntity.ok(new ApiResponse<>(existing));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ApiResponse<Company>> patchCompany(
+    public ResponseEntity<ApiResponse<CompanyDTO>> patchCompany(
             @PathVariable("id") int id,
             @RequestBody Company updateCompany
     ) {
-        Company company = companyService.patchCompany(id, updateCompany);
+        CompanyDTO company = companyService.patchCompany(id, updateCompany);
         return ResponseEntity.ok(new ApiResponse<>(company));
     }
 }
