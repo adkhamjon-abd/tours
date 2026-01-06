@@ -1,5 +1,7 @@
 package org.example.service.impl;
 
+import org.example.dto.TourDTO;
+import org.example.dto.mapper.TourMapper;
 import org.example.exception.CompanyNotFoundException;
 import org.example.exception.TourAlreadyExistsException;
 import org.example.exception.TourNotFoundException;
@@ -16,13 +18,15 @@ public class TourServiceImpl implements TourService {
 
     private final TourRepository tourRepository;
     private final CompanyRepository companyRepository;
+    private final TourMapper tourMapper;
 
-    public TourServiceImpl(TourRepository tourRepository, CompanyRepository companyRepository){
+    public TourServiceImpl(TourRepository tourRepository, CompanyRepository companyRepository, TourMapper tourMapper){
         this.tourRepository = tourRepository;
         this.companyRepository = companyRepository;
+        this.tourMapper = tourMapper;
     }
 
-    public Tour createTour(Tour tour) {
+    public TourDTO createTour(Tour tour) {
         tourRepository.findById(tour.getId())
                 .ifPresent(t -> {
                     throw new TourAlreadyExistsException(
@@ -36,21 +40,21 @@ public class TourServiceImpl implements TourService {
         );
 
         //companyid and id
-        return tourRepository.save(tour);
+        return tourMapper.tourToTourDTO(tourRepository.save(tour));
     }
 
-    public Tour getById(int id) {
+    public TourDTO getById(int id) {
         Tour tour = tourRepository.findById(id).orElseThrow(() ->
                 new TourNotFoundException("Tour with such id does not exist")
         );
 
         tour.setViewCount(tour.getViewCount() + 1);
 
-        return tour;
+        return tourMapper.tourToTourDTO(tour);
     }
 
-    public List<Tour> getAll() {
-        List<Tour> tours = tourRepository.findAll();
+    public List<TourDTO> getAll() {
+        List<TourDTO> tours = tourRepository.findAll().stream().map(tourMapper::tourToTourDTO).toList();
         return tours;
     }
 
@@ -61,7 +65,7 @@ public class TourServiceImpl implements TourService {
         tourRepository.deleteTourById(id);
     }
 
-    public Tour updateTour(int id, Tour updateTour) {
+    public TourDTO updateTour(int id, Tour updateTour) {
         Tour tour = tourRepository.findById(id).orElseThrow(() ->
                 new TourNotFoundException("Tour with such id does not exist")
         );
@@ -69,10 +73,10 @@ public class TourServiceImpl implements TourService {
         tour.setName(updateTour.getName());
         tour.setCompanyId(updateTour.getCompanyId());
         tour.setViewCount(updateTour.getViewCount());
-        return tour;
+        return tourMapper.tourToTourDTO(tour);
     }
 
-    public Tour patchTour(int id, Tour updateTour) {
+    public TourDTO patchTour(int id, Tour updateTour) {
         Tour existingTour = tourRepository.findById(id).orElseThrow(() ->
                 new TourNotFoundException("Tour with such id does not exist")
         );
@@ -93,6 +97,6 @@ public class TourServiceImpl implements TourService {
         }
 
         tourRepository.update(existingTour);
-        return existingTour;
+        return tourMapper.tourToTourDTO(existingTour);
     }
 }
