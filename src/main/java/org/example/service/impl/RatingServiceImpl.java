@@ -1,5 +1,7 @@
 package org.example.service.impl;
 
+import org.example.dto.RatingDTO;
+import org.example.dto.mapper.RatingMapper;
 import org.example.exception.RatingAlreadyExistsException;
 import org.example.exception.RatingNotFoundException;
 import org.example.exception.RatingScoreOutOfRangeException;
@@ -17,10 +19,12 @@ public class RatingServiceImpl implements RatingService {
 
     private RatingRepository ratingRepository;
     private TourRepository tourRepository;
+    private final RatingMapper ratingMapper;
 
-    public RatingServiceImpl(RatingRepository ratingRepository, TourRepository tourRepository){
+    public RatingServiceImpl(RatingRepository ratingRepository, TourRepository tourRepository, RatingMapper ratingMapper){
         this.ratingRepository = ratingRepository;
         this.tourRepository = tourRepository;
+        this.ratingMapper = ratingMapper;
     }
 
     private Double findAverageRatingByTourId(int id) {
@@ -37,7 +41,7 @@ public class RatingServiceImpl implements RatingService {
         return totalScore / numberOfScores;
     }
 
-    public Rating createRating(Rating rating) {
+    public RatingDTO createRating(Rating rating) {
         ratingRepository.findById(rating.getId())
                 .ifPresent(r -> {
                     throw new RatingAlreadyExistsException(
@@ -47,23 +51,23 @@ public class RatingServiceImpl implements RatingService {
         tourRepository
                 .findById(rating.getTourId())
                 .orElseThrow(() -> new TourNotFoundException("Tour with such id does not exist"));
-        return ratingRepository.save(rating);
+        return ratingMapper.ratingToRatingDTO(ratingRepository.save(rating));
     }
 
-    public List<Rating> getAll() {
-        return ratingRepository.findAll();
+    public List<RatingDTO> getAll() {
+        return ratingRepository.findAll().stream().map(ratingMapper::ratingToRatingDTO).toList();
     }
 
     public Double getAverageRatingByTourId(int id) {
         return findAverageRatingByTourId(id);
     }
 
-    public Rating getRatingById(int id) {
+    public RatingDTO getRatingById(int id) {
         Rating rating = ratingRepository
                 .findById(id)
                 .orElseThrow(() -> new RatingNotFoundException("Rating with such id does not exist"));
 
-        return rating;
+        return ratingMapper.ratingToRatingDTO(rating);
     }
 
     public void deleteRating(int id) {
@@ -73,7 +77,7 @@ public class RatingServiceImpl implements RatingService {
         ratingRepository.deleteById(id);
     }
 
-    public Rating updateRating(int id, Rating updateRating) {
+    public RatingDTO updateRating(int id, Rating updateRating) {
         Rating rating = ratingRepository
                 .findById(id)
                 .orElseThrow((()-> new RatingNotFoundException("Rating with such id does not exist")));
@@ -88,10 +92,10 @@ public class RatingServiceImpl implements RatingService {
         rating.setScore(updateRating.getScore());
 
         ratingRepository.update(rating);
-        return rating;
+        return ratingMapper.ratingToRatingDTO(rating);
     }
 
-    public Rating patchRating(int id, Rating patchRating) {
+    public RatingDTO patchRating(int id, Rating patchRating) {
         Rating rating = ratingRepository
                 .findById(id)
                 .orElseThrow(() -> new RatingNotFoundException("Rating with such id does not exist"));
@@ -113,6 +117,6 @@ public class RatingServiceImpl implements RatingService {
         }
 
         ratingRepository.update(rating);
-        return rating;
+        return ratingMapper.ratingToRatingDTO(rating);
     }
 }
