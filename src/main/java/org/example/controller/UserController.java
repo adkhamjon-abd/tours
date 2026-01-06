@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import org.example.dto.UserDTO;
 import org.example.model.User;
 import org.example.response.ApiResponse;
 import org.example.service.impl.UserServiceImpl;
@@ -21,16 +22,16 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<User>> createUser(@RequestBody User user) {
-        User createdUser = userService.createUser(user);
+    public ResponseEntity<ApiResponse<UserDTO>> createUser(@RequestBody User user) {
+        UserDTO createdUser = userService.createUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(createdUser));
     }
 
     ;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<User>>> getAll() {
-        List<User> users = userService.getAll();
+    public ResponseEntity<ApiResponse<List<UserDTO>>> getAll() {
+        List<UserDTO> users = userService.getAll();
         return ResponseEntity.ok().body(new ApiResponse<>(users));
     }
 
@@ -41,17 +42,17 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<User>> getById(@PathVariable("id") int id) {
-        User user = userService.getById(id);
+    public ResponseEntity<ApiResponse<UserDTO>> getById(@PathVariable("id") int id) {
+        UserDTO user = userService.getById(id);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(user));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<User>> updateUser(
+    public ResponseEntity<ApiResponse<UserDTO>> updateUser(
             @PathVariable("id") int id,
             @RequestBody User user
     ) {
-        User updated = userService.updateUser(id, user);
+        UserDTO updated = userService.updateUser(id, user);
         if (updated == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -59,11 +60,11 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ApiResponse<User>> patchUser(
+    public ResponseEntity<ApiResponse<UserDTO>> patchUser(
             @PathVariable("id") int id,
             @RequestBody User user
     ) {
-        User updatedUser = userService.patchUser(id, user);
+        UserDTO updatedUser = userService.patchUser(id, user);
         if (updatedUser == null) return ResponseEntity.notFound().build();
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(updatedUser));
     }

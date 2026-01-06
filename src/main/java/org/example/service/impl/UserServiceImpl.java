@@ -1,5 +1,7 @@
 package org.example.service.impl;
 
+import org.example.dto.UserDTO;
+import org.example.dto.mapper.UserMapper;
 import org.example.exception.UserAlreadyExistsException;
 import org.example.exception.UserNotFoundException;
 import org.example.model.User;
@@ -14,51 +16,49 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
-    public UserServiceImpl(UserRepository userRepository){
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
-    public User createUser(User user) {
+    public UserDTO createUser(User user) {
 
-         userRepository.findById(user.getId())
-                .ifPresent(u -> {
-                    throw new UserAlreadyExistsException("User already exists");
-                });
+        userRepository.findById(user.getId()).ifPresent(u -> {
+            throw new UserAlreadyExistsException("User already exists");
+        });
 
-        return userRepository.save(user);
+        return userMapper.userToUserDTO(userRepository.save(user));
     }
 
-    public List<User> getAll() {
-        return userRepository.findAll();
+    public List<UserDTO> getAll() {
+        return userRepository.findAll().stream().map(userMapper::userToUserDTO).toList();
     }
 
     public void deleteUser(int id) {
-        userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User with such id does not exist"));
+        userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with such id does not exist"));
 
         userRepository.deleteById(id);
     }
 
-    public User getById(int id) {
+    public UserDTO getById(int id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with such id does not exist"));
 
-        return user;
+        return userMapper.userToUserDTO(user);
     }
 
-    public User updateUser(int id, User user) {
-        User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User with such id does not exist"));
+    public UserDTO updateUser(int id, User user) {
+        User existingUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with such id does not exist"));
 
         existingUser.setUsername(user.getUsername());
         existingUser.setPassword(user.getPassword());
         userRepository.update(existingUser);
-        return existingUser;
+        return userMapper.userToUserDTO(existingUser);
     }
 
-    public User patchUser(int id, User updateUser) {
-        User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User with such id does not exist"));
+    public UserDTO patchUser(int id, User updateUser) {
+        User existingUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with such id does not exist"));
 
         if (updateUser.getUsername() != null) {
             existingUser.setUsername(updateUser.getUsername());
@@ -69,6 +69,6 @@ public class UserServiceImpl implements UserService {
         }
 
         userRepository.update(existingUser);
-        return existingUser;
+        return userMapper.userToUserDTO(existingUser);
     }
 }
