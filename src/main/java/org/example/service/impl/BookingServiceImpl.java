@@ -1,5 +1,7 @@
 package org.example.service.impl;
 
+import org.example.dto.BookingDTO;
+import org.example.dto.mapper.BookingMapper;
 import org.example.exception.*;
 import org.example.model.Booking;
 import org.example.model.User;
@@ -18,17 +20,19 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
     private final TourRepository tourRepository;
+    private final BookingMapper bookingMapper;
 
     public BookingServiceImpl(BookingRepository bookingRepository,
-                          UserRepository userRepository,
-                          TourRepository tourRepository) {
+                              UserRepository userRepository,
+                              TourRepository tourRepository, BookingMapper bookingMapper) {
         this.bookingRepository = bookingRepository;
         this.userRepository = userRepository;
         this.tourRepository = tourRepository;
+        this.bookingMapper = bookingMapper;
     }
 
 
-    public Booking createBooking(Booking booking) {
+    public BookingDTO createBooking(Booking booking) {
         //Check user
         User user = userRepository
                 .findById(booking.getUserId())
@@ -50,19 +54,19 @@ public class BookingServiceImpl implements BookingService {
 
         Booking result = bookingRepository.save(booking);
 
-        return result;
+        return bookingMapper.bookingToBookingDTO(result);
 
     }
 
-    public Booking getBooking(int id) {
+    public BookingDTO getBooking(int id) {
         Booking booking = bookingRepository
                 .findById(id)
                 .orElseThrow(() -> new BookingNotFoundException("Booking with such id does not exist"));
 
-        return booking;
+        return bookingMapper.bookingToBookingDTO(booking);
     }
 
-    public List<Booking> getBookingByUserId(int id) {
+    public List<BookingDTO> getBookingByUserId(int id) {
         User user  = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with such id does not exist"));
 
         List<Booking> bookings = bookingRepository.findAll();
@@ -72,12 +76,12 @@ public class BookingServiceImpl implements BookingService {
                 idBookings.add(current);
             }
         }
-        return idBookings;
+        return idBookings.stream().map(bookingMapper::bookingToBookingDTO).toList();
     }
 
-    public List<Booking> getAllBookings() {
+    public List<BookingDTO> getAllBookings() {
         List<Booking> bookings = bookingRepository.findAll();
-        return bookings;
+        return bookings.stream().map(bookingMapper::bookingToBookingDTO).toList();
     }
 
     public void deleteBooking(int id) {
@@ -87,7 +91,7 @@ public class BookingServiceImpl implements BookingService {
         bookingRepository.deleteById(id);
     }
 
-    public Booking updateBooking(int id, Booking booking) {
+    public BookingDTO updateBooking(int id, Booking booking) {
         if (booking.getUserId() <= 0 || booking.getTourId() <= 0) {
             throw new InvalidBookingDataException("userId and tourId must be provided and > 0");
         }
@@ -99,10 +103,10 @@ public class BookingServiceImpl implements BookingService {
         existing.setTourId(booking.getTourId());
         bookingRepository.update(existing);
 
-        return existing;
+        return bookingMapper.bookingToBookingDTO(existing);
     }
 
-    public Booking patchBooking(int id, Booking updateBooking) {
+    public BookingDTO patchBooking(int id, Booking updateBooking) {
 
 
         Booking existing = bookingRepository
@@ -126,6 +130,6 @@ public class BookingServiceImpl implements BookingService {
         }
 
         bookingRepository.update(existing);
-        return existing;
+        return bookingMapper.bookingToBookingDTO(existing);
     }
 }
