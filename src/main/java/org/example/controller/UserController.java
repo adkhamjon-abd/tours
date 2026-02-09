@@ -1,6 +1,9 @@
 package org.example.controller;
 
 import org.example.dto.UserDTO;
+import org.example.dto.request.CreateUserRequest;
+import org.example.dto.request.UpdateUserRequest;
+import org.example.dto.response.UserResponse;
 import org.example.model.User;
 import org.example.response.ApiResponse;
 import org.example.service.impl.UserServiceImpl;
@@ -22,16 +25,16 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<UserDTO>> createUser(@RequestBody User user) {
-        UserDTO createdUser = userService.createUser(user);
+    public ResponseEntity<ApiResponse<UserResponse>> createUser(@RequestBody CreateUserRequest userRequest) {
+        UserResponse createdUser = userService.createUser(userRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(createdUser));
     }
 
     ;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<UserDTO>>> getAll() {
-        List<UserDTO> users = userService.getAll();
+    public ResponseEntity<ApiResponse<List<UserResponse>>> getAll() {
+        List<UserResponse> users = userService.getAll();
         return ResponseEntity.ok().body(new ApiResponse<>(users));
     }
 
@@ -42,17 +45,17 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<UserDTO>> getById(@PathVariable("id") int id) {
-        UserDTO user = userService.getById(id);
+    public ResponseEntity<ApiResponse<UserResponse>> getById(@PathVariable("id") int id) {
+        UserResponse user = userService.getById(id);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(user));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<UserDTO>> updateUser(
+    public ResponseEntity<ApiResponse<UserResponse>> updateUser(
             @PathVariable("id") int id,
-            @RequestBody User user
+            @RequestBody UpdateUserRequest updateUserRequest
     ) {
-        UserDTO updated = userService.updateUser(id, user);
+        UserResponse updated = userService.updateUser(id, updateUserRequest);
         if (updated == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -60,11 +63,11 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ApiResponse<UserDTO>> patchUser(
+    public ResponseEntity<ApiResponse<UserResponse>> patchUser(
             @PathVariable("id") int id,
-            @RequestBody User user
-    ) {
-        UserDTO updatedUser = userService.patchUser(id, user);
+            @RequestBody UpdateUserRequest updateUserRequest
+            ) {
+        UserResponse updatedUser = userService.patchUser(id, updateUserRequest);
         if (updatedUser == null) return ResponseEntity.notFound().build();
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(updatedUser));
     }
