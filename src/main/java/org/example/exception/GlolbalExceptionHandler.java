@@ -84,7 +84,7 @@ public class GlolbalExceptionHandler {
     @ExceptionHandler(CompanyNotFoundException.class)
     public ResponseEntity<ApiResponse<String>> companyNotFoundException(CompanyNotFoundException companyNotFoundException,
                                                                         Locale locale){
-        return generalResponse("error.company.not.found", HttpStatus.NOT_FOUND, companyNotFoundException, locale);
+        return generalResponse("error.company.not.found", HttpStatus.NOT_FOUND, companyNotFoundException, locale, companyNotFoundException.getId());
     }
 
     @ExceptionHandler(CompanyAlreadyExistsException.class)

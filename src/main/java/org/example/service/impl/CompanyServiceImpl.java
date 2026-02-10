@@ -28,7 +28,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     public CompanyResponse getCompanyById(int id) {
         Company company = companyRepository.findById(id)
-                .orElseThrow(() -> new CompanyNotFoundException("Company with such id does not exist"));
+                .orElseThrow(() -> new CompanyNotFoundException(id));
         return companyMapper.toResponse(company);
     }
 
@@ -50,14 +50,14 @@ public class CompanyServiceImpl implements CompanyService {
     public void deleteCompany(int id) {
 
         Company company = companyRepository.findById(id)
-                .orElseThrow(() -> new CompanyNotFoundException("Company with such id does not exist"));
+                .orElseThrow(() -> new CompanyNotFoundException(id));
 
         companyRepository.deleteById(id);
     }
 
     public CompanyResponse updateCompany(int id, UpdateCompanyRequest updateCompany) {
         Company existingCompany = companyRepository.findById(id)
-                .orElseThrow(() -> new CompanyNotFoundException("Company with such id does not exist"));
+                .orElseThrow(() -> new CompanyNotFoundException(id));
 
         existingCompany.setName(updateCompany.getName());
         companyRepository.update(existingCompany);
@@ -67,7 +67,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     public CompanyResponse patchCompany(int id, UpdateCompanyRequest updateCompany) {
         Company existingCompany = companyRepository.findById(id)
-                .orElseThrow(() -> new CompanyNotFoundException("Company with such id does not exist"));
+                .orElseThrow(() -> new CompanyNotFoundException(id));
 
         if (updateCompany.getName() != null){
             existingCompany.setName(updateCompany.getName());
