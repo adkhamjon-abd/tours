@@ -40,7 +40,7 @@ public class BookingServiceImpl implements BookingService {
         //Check user
         User user = userRepository
                 .findById(booking.getUserId())
-                .orElseThrow(() -> new UserNotFoundException("User with such id does not exist"));
+                .orElseThrow(() -> new UserNotFoundException(booking.getUserId()));
 
         //Check tour
         tourRepository.findById(booking.getTourId()).orElseThrow(() ->
@@ -65,13 +65,13 @@ public class BookingServiceImpl implements BookingService {
     public BookingResponse getBooking(int id) {
         Booking booking = bookingRepository
                 .findById(id)
-                .orElseThrow(() -> new BookingNotFoundException("Booking with such id does not exist"));
+                .orElseThrow(() -> new BookingNotFoundException(id));
 
         return bookingMapper.toResponse(booking);
     }
 
     public List<BookingResponse> getBookingByUserId(int id) {
-        User user  = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with such id does not exist"));
+        User user  = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
 
         List<Booking> bookings = bookingRepository.findAll();
         List<Booking> idBookings = new ArrayList<>();
@@ -91,7 +91,7 @@ public class BookingServiceImpl implements BookingService {
     public void deleteBooking(int id) {
         Booking booking = bookingRepository
                 .findById(id)
-                .orElseThrow(() -> new BookingNotFoundException("Booking with such id does not exist"));
+                .orElseThrow(() -> new BookingNotFoundException(id));
         bookingRepository.deleteById(id);
     }
 
@@ -101,7 +101,7 @@ public class BookingServiceImpl implements BookingService {
         }
         Booking existing = bookingRepository
                 .findById(id)
-                .orElseThrow(() -> new BookingNotFoundException("Booking with such id does not exist"));
+                .orElseThrow(() -> new BookingNotFoundException(id));
 
         existing.setUserId(booking.getUserId());
         existing.setTourId(booking.getTourId());
@@ -115,13 +115,13 @@ public class BookingServiceImpl implements BookingService {
 
         Booking existing = bookingRepository
                 .findById(id)
-                .orElseThrow(() -> new BookingNotFoundException("Booking with such id does not exist"));
+                .orElseThrow(() -> new BookingNotFoundException(id));
 
 
         if (updateBooking.getUserId() > 0) {
             userRepository
                     .findById(updateBooking.getUserId())
-                    .orElseThrow(() -> new UserNotFoundException("User with such id does not exist"));
+                    .orElseThrow(() -> new UserNotFoundException(id));
             existing.setUserId(updateBooking.getUserId());
         }
 

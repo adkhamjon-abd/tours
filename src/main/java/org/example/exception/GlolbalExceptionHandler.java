@@ -42,7 +42,7 @@ public class GlolbalExceptionHandler {
     public ResponseEntity<ApiResponse<String>> bookingNotFoundException(BookingNotFoundException bookingNotFoundException,
                                                                         Locale locale){
 
-        return generalResponse("error.booking.not.found", HttpStatus.NOT_FOUND, bookingNotFoundException, locale);
+        return generalResponse("error.booking.not.found", HttpStatus.NOT_FOUND, bookingNotFoundException, locale, bookingNotFoundException.getId());
 
     }
 
