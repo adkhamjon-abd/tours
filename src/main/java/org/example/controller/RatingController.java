@@ -1,6 +1,8 @@
 package org.example.controller;
 
-import org.example.dto.RatingDTO;
+import org.example.dto.request.CreateRatingRequest;
+import org.example.dto.request.UpdateRatingRequest;
+import org.example.dto.response.RatingResponse;
 import org.example.model.Rating;
 import org.example.response.ApiResponse;
 import org.example.service.impl.RatingServiceImpl;
@@ -20,14 +22,14 @@ public class RatingController {
     }
 
     @PostMapping()
-    public ResponseEntity<ApiResponse<RatingDTO>> createRating(@RequestBody Rating rating) {
-        RatingDTO newRating = ratingService.createRating(rating);
+    public ResponseEntity<ApiResponse<RatingResponse>> createRating(@RequestBody CreateRatingRequest rating) {
+        RatingResponse newRating = ratingService.createRating(rating);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(newRating));
     }
 
     @GetMapping()
-    public ResponseEntity<ApiResponse<List<RatingDTO>>> getAll() {
-        List<RatingDTO> ratings = ratingService.getAll();
+    public ResponseEntity<ApiResponse<List<RatingResponse>>> getAll() {
+        List<RatingResponse> ratings = ratingService.getAll();
         return ResponseEntity.ok(new ApiResponse<>(ratings));
     }
 
@@ -38,8 +40,8 @@ public class RatingController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<RatingDTO>> getRating(@PathVariable("id") int id) {
-        RatingDTO rating = ratingService.getRatingById(id);
+    public ResponseEntity<ApiResponse<RatingResponse>> getRating(@PathVariable("id") int id) {
+        RatingResponse rating = ratingService.getRatingById(id);
         return ResponseEntity.ok(new ApiResponse<>(rating));
     }
 
@@ -50,14 +52,14 @@ public class RatingController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<RatingDTO>> updateRating(@PathVariable("id") int id, @RequestBody Rating updateRating) {
-        RatingDTO rating = ratingService.updateRating(id, updateRating);
+    public ResponseEntity<ApiResponse<RatingResponse>> updateRating(@PathVariable("id") int id, @RequestBody UpdateRatingRequest updateRating) {
+        RatingResponse rating = ratingService.updateRating(id, updateRating);
         return ResponseEntity.ok(new ApiResponse<>(rating));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ApiResponse<RatingDTO>> patchRating(@PathVariable("id") int id, @RequestBody Rating patchRating) {
-        RatingDTO rating = ratingService.patchRating(id, patchRating);
+    public ResponseEntity<ApiResponse<RatingResponse>> patchRating(@PathVariable("id") int id, @RequestBody UpdateRatingRequest patchRating) {
+        RatingResponse rating = ratingService.patchRating(id, patchRating);
         return ResponseEntity.ok(new ApiResponse<>(rating));
     }
 }
