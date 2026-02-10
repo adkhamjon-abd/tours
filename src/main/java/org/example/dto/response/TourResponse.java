@@ -1,7 +1,11 @@
-package org.example.dto;
+package org.example.dto.response;
 
-public class TourDTO {
-    private int id;
+import lombok.Getter;
+import lombok.Setter;
+
+
+public class TourResponse {
+    int id;
     private String name;
     private int companyId;  // link to the Company
 

@@ -1,7 +1,8 @@
 package org.example.controller;
 
-import org.example.dto.TourDTO;
-import org.example.model.Tour;
+import org.example.dto.request.CreateTourRequest;
+import org.example.dto.request.UpdateTourRequest;
+import org.example.dto.response.TourResponse;
 import org.example.response.ApiResponse;
 import org.example.service.impl.TourServiceImpl;
 import org.springframework.http.HttpStatus;
@@ -20,20 +21,20 @@ public class TourController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<TourDTO>> createTour(@RequestBody Tour tour) {
-        TourDTO created = tourService.createTour(tour);
+    public ResponseEntity<ApiResponse<TourResponse>> createTour(@RequestBody CreateTourRequest tourRequest) {
+        TourResponse created = tourService.createTour(tourRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(created));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<TourDTO>> getById(@PathVariable("id") int id) {
-        TourDTO tour = tourService.getById(id);
+    public ResponseEntity<ApiResponse<TourResponse>> getById(@PathVariable("id") int id) {
+        TourResponse tour = tourService.getById(id);
         return ResponseEntity.ok(new ApiResponse<>(tour));
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<TourDTO>>> getAll() {
-        List<TourDTO> tours = tourService.getAll();
+    public ResponseEntity<ApiResponse<List<TourResponse>>> getAll() {
+        List<TourResponse> tours = tourService.getAll();
         return ResponseEntity.ok(new ApiResponse<>(tours));
     }
 
@@ -44,20 +45,20 @@ public class TourController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<TourDTO>> updateTour(
+    public ResponseEntity<ApiResponse<TourResponse>> updateTour(
             @PathVariable("id") int id,
-            @RequestBody Tour updateTour
+            @RequestBody UpdateTourRequest updateTourRequest
     ) {
-        TourDTO tour = tourService.updateTour(id, updateTour);
+        TourResponse tour = tourService.updateTour(id, updateTourRequest);
         return ResponseEntity.ok(new ApiResponse<>(tour));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ApiResponse<TourDTO>> patchTour(
+    public ResponseEntity<ApiResponse<TourResponse>> patchTour(
             @PathVariable("id") int id,
-            @RequestBody Tour updateTour
+            @RequestBody UpdateTourRequest updateTour
     ) {
-        TourDTO tour = tourService.patchTour(id, updateTour);
+        TourResponse tour = tourService.patchTour(id, updateTour);
         return ResponseEntity.ok(new ApiResponse<>(tour));
     }
 }

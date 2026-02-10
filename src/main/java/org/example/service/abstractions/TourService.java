@@ -1,15 +1,16 @@
 package org.example.service.abstractions;
 
-import org.example.dto.TourDTO;
-import org.example.model.Tour;
+import org.example.dto.request.CreateTourRequest;
+import org.example.dto.request.UpdateTourRequest;
+import org.example.dto.response.TourResponse;
 
 import java.util.List;
 
 public interface TourService {
-    TourDTO createTour(Tour tour);
-    TourDTO getById(int id);
-    List<TourDTO> getAll();
+    TourResponse createTour(CreateTourRequest tour);
+    TourResponse getById(int id);
+    List<TourResponse> getAll();
     void deleteTour(int id);
-    TourDTO updateTour(int id, Tour updateTour);
-    TourDTO patchTour(int id, Tour updateTour);
+    TourResponse updateTour(int id, UpdateTourRequest updateTour);
+    TourResponse patchTour(int id, UpdateTourRequest updateTour);
 }
