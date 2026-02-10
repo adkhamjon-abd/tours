@@ -1,17 +1,19 @@
 package org.example.service.abstractions;
 
-import org.example.dto.BookingDTO;
+import org.example.dto.request.CreateBookingRequest;
+import org.example.dto.request.UpdateBookingRequest;
+import org.example.dto.response.BookingResponse;
 import org.example.model.Booking;
 
 import java.util.List;
 
 public interface BookingService {
-    BookingDTO createBooking(Booking booking);
-    BookingDTO getBooking(int id);
-    List<BookingDTO> getBookingByUserId(int id);
-    List<BookingDTO> getAllBookings();
+    BookingResponse createBooking(CreateBookingRequest booking);
+    BookingResponse getBooking(int id);
+    List<BookingResponse> getBookingByUserId(int id);
+    List<BookingResponse> getAllBookings();
     void deleteBooking(int id);
-    BookingDTO updateBooking(int id, Booking booking);
-    BookingDTO patchBooking(int id, Booking updateBooking);
+    BookingResponse updateBooking(int id, UpdateBookingRequest booking);
+    BookingResponse patchBooking(int id, UpdateBookingRequest updateBooking);
 
 }

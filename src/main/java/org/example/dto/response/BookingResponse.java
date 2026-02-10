@@ -1,6 +1,6 @@
-package org.example.dto;
+package org.example.dto.response;
 
-public class BookingDTO {
+public class BookingResponse {
     private int id;
     private int userId;
     private int tourId;

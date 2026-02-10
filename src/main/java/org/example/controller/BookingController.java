@@ -1,8 +1,10 @@
 package org.example.controller;
 
-import org.example.dto.BookingDTO;
+import org.example.dto.request.CreateBookingRequest;
+import org.example.dto.request.UpdateBookingRequest;
 import org.example.model.Booking;
 import org.example.response.ApiResponse;
+import org.example.dto.response.BookingResponse;
 import org.example.service.abstractions.BookingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,26 +23,26 @@ public class BookingController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<BookingDTO>> createBooking(@RequestBody Booking booking) {
-        BookingDTO createdBooking = bookingService.createBooking(booking);
+    public ResponseEntity<ApiResponse<BookingResponse>> createBooking(@RequestBody CreateBookingRequest booking) {
+        BookingResponse createdBooking = bookingService.createBooking(booking);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(createdBooking));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<BookingDTO>> getBooking(@PathVariable("id") int id) {
-        BookingDTO booking = bookingService.getBooking(id);
+    public ResponseEntity<ApiResponse<BookingResponse>> getBooking(@PathVariable("id") int id) {
+        BookingResponse booking = bookingService.getBooking(id);
         return ResponseEntity.ok(new ApiResponse<>(booking));
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<ApiResponse<List<BookingDTO>>> getBookingsByUserId(@PathVariable("id") int id) {
-        List<BookingDTO> bookings = bookingService.getBookingByUserId(id);
+    public ResponseEntity<ApiResponse<List<BookingResponse>>> getBookingsByUserId(@PathVariable("id") int id) {
+        List<BookingResponse> bookings = bookingService.getBookingByUserId(id);
         return ResponseEntity.ok(new ApiResponse<>(bookings));
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<BookingDTO>>> getAllBookings() {
-        List<BookingDTO> bookings = bookingService.getAllBookings();
+    public ResponseEntity<ApiResponse<List<BookingResponse>>> getAllBookings() {
+        List<BookingResponse> bookings = bookingService.getAllBookings();
         return ResponseEntity.ok(new ApiResponse<>(bookings));
 
     }
@@ -52,14 +54,14 @@ public class BookingController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<BookingDTO>> updateBooking(@PathVariable("id") int id, @RequestBody Booking updateBooking) {
-        BookingDTO booking = bookingService.updateBooking(id, updateBooking);
+    public ResponseEntity<ApiResponse<BookingResponse>> updateBooking(@PathVariable("id") int id, @RequestBody UpdateBookingRequest updateBooking) {
+        BookingResponse booking = bookingService.updateBooking(id, updateBooking);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(booking));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ApiResponse<BookingDTO>> patchBooking(@PathVariable("id") int id, @RequestBody Booking updateBooking) {
-        BookingDTO booking = bookingService.patchBooking(id, updateBooking);
+    public ResponseEntity<ApiResponse<BookingResponse>> patchBooking(@PathVariable("id") int id, @RequestBody UpdateBookingRequest updateBooking) {
+        BookingResponse booking = bookingService.patchBooking(id, updateBooking);
         return ResponseEntity.ok(new ApiResponse<>(booking));
 
     }
