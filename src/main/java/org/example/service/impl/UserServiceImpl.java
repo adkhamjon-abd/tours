@@ -1,6 +1,5 @@
 package org.example.service.impl;
 
-import org.example.dto.UserDTO;
 import org.example.dto.mapper.UserMapper;
 import org.example.dto.request.CreateUserRequest;
 import org.example.dto.request.UpdateUserRequest;
@@ -11,7 +10,6 @@ import org.example.model.User;
 import org.example.repository.UserRepository;
 
 import org.example.service.abstractions.UserService;
-import org.hibernate.sql.Update;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,13 +41,13 @@ public class UserServiceImpl implements UserService {
     }
 
     public void deleteUser(int id) {
-        userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with such id does not exist"));
+        userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
 
         userRepository.deleteById(id);
     }
 
     public UserResponse getById(int id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with such id does not exist"));
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
 
         return userMapper.toResponse(user);
     }
@@ -57,7 +55,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse updateUser(int id, UpdateUserRequest updateUserRequest) {
         // Convert request to entity
         User user = userMapper.toEntity(updateUserRequest);
-        User existingUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with such id does not exist"));
+        User existingUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
 
 
         existingUser.setUsername(user.getUsername());
@@ -69,7 +67,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse patchUser(int id, UpdateUserRequest updateUserRequest) {
         // Convert request to entity
         User user = userMapper.toEntity(updateUserRequest);
-        User existingUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with such id does not exist"));
+        User existingUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
 
         if (user.getUsername() != null) {
             existingUser.setUsername(updateUserRequest.getUsername());

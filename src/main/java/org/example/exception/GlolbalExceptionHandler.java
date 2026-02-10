@@ -27,10 +27,10 @@ public class GlolbalExceptionHandler {
             String messageKey,
             HttpStatus httpStatus,
             RuntimeException exception,
-            Locale locale
+            Locale locale,
+            Object... args
     ){
-
-        String message = messageSource.getMessage(messageKey,null, locale);
+        String message = messageSource.getMessage(messageKey, args, locale);
         System.out.println("Resolved message: " + message);
 
         logger.error(message, exception);
@@ -63,7 +63,7 @@ public class GlolbalExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ApiResponse<String>> userNotFoundException(UserNotFoundException userNotFoundException,
                                                                      Locale locale){
-        return generalResponse("error.user.not.found", HttpStatus.NOT_FOUND, userNotFoundException, locale);
+        return generalResponse("error.user.not.found", HttpStatus.NOT_FOUND, userNotFoundException, locale, userNotFoundException.getId());
 
     }
 
