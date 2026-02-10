@@ -1,9 +1,5 @@
 package org.example.dto.response;
 
-import lombok.Getter;
-import lombok.Setter;
-
-
 public class TourResponse {
     int id;
     private String name;
