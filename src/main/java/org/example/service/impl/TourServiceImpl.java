@@ -33,13 +33,13 @@ public class TourServiceImpl implements TourService {
         tourRepository.findById(tour.getId())
                 .ifPresent(t -> {
                     throw new TourAlreadyExistsException(
-                            "Tour with this id already exists"
+                            "Tour already exists"
                     );
                 });
 
 
         companyRepository.findById(tour.getCompanyId()).orElseThrow(
-                () -> new CompanyNotFoundException("Company with such id does not exist")
+                () -> new CompanyNotFoundException(tour.getCompanyId())
         );
 
         //companyid and id
@@ -48,7 +48,7 @@ public class TourServiceImpl implements TourService {
 
     public TourResponse getById(int id) {
         Tour tour = tourRepository.findById(id).orElseThrow(() ->
-                new TourNotFoundException("Tour with such id does not exist")
+                new TourNotFoundException(id)
         );
 
         tour.setViewCount(tour.getViewCount() + 1);
@@ -83,7 +83,7 @@ public class TourServiceImpl implements TourService {
 
     public TourResponse patchTour(int id, UpdateTourRequest updateTour) {
         Tour existingTour = tourRepository.findById(id).orElseThrow(() ->
-                new TourNotFoundException("Tour with such id does not exist")
+                new TourNotFoundException(id)
         );
         existingTour.setName(updateTour.getName());
         existingTour.setCompanyId(updateTour.getCompanyId());

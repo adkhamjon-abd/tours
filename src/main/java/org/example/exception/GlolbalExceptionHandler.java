@@ -71,7 +71,7 @@ public class GlolbalExceptionHandler {
     public ResponseEntity<ApiResponse<String>> tourNotFoundException(TourNotFoundException tourNotFoundException,
                                                                      Locale locale){
 
-        return generalResponse("error.tour.not.found", HttpStatus.NOT_FOUND, tourNotFoundException, locale);
+        return generalResponse("error.tour.not.found", HttpStatus.NOT_FOUND, tourNotFoundException, locale, tourNotFoundException.getId());
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)

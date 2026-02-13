@@ -44,7 +44,7 @@ public class BookingServiceImpl implements BookingService {
 
         //Check tour
         tourRepository.findById(booking.getTourId()).orElseThrow(() ->
-                new TourNotFoundException("Tour with such id does not exist")
+                new TourNotFoundException(booking.getTourId())
         );
 
         boolean booked =
@@ -128,7 +128,7 @@ public class BookingServiceImpl implements BookingService {
         if (updateBooking.getTourId() > 0) {
             tourRepository
                     .findById(updateBooking.getTourId())
-                    .orElseThrow(() -> new TourNotFoundException("Tour with such Id does not exist"));
+                    .orElseThrow(() -> new TourNotFoundException(updateBooking.getTourId()));
 
             existing.setTourId(updateBooking.getTourId());
         }
