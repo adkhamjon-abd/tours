@@ -1,6 +1,5 @@
 package org.example.service.impl;
 
-import org.example.dto.RatingDTO;
 import org.example.dto.mapper.RatingMapper;
 import org.example.dto.request.CreateRatingRequest;
 import org.example.dto.request.UpdateRatingRequest;
@@ -55,7 +54,7 @@ public class RatingServiceImpl implements RatingService {
                 });
         tourRepository
                 .findById(rating.getTourId())
-                .orElseThrow(() -> new TourNotFoundException("Tour with such id does not exist"));
+                .orElseThrow(() -> new TourNotFoundException(rating.getTourId()));
         return ratingMapper.toResponse(ratingRepository.save(rating));
     }
 
@@ -70,7 +69,7 @@ public class RatingServiceImpl implements RatingService {
     public RatingResponse getRatingById(int id) {
         Rating rating = ratingRepository
                 .findById(id)
-                .orElseThrow(() -> new RatingNotFoundException("Rating with such id does not exist"));
+                .orElseThrow(() -> new RatingNotFoundException(id));
 
         return ratingMapper.toResponse(rating);
     }
@@ -85,7 +84,7 @@ public class RatingServiceImpl implements RatingService {
     public RatingResponse updateRating(int id, UpdateRatingRequest updateRating) {
         Rating rating = ratingRepository
                 .findById(id)
-                .orElseThrow((()-> new RatingNotFoundException("Rating with such id does not exist")));
+                .orElseThrow((()-> new RatingNotFoundException(id)));
 
 
         rating.setUserId(updateRating.getUserId());
@@ -103,7 +102,7 @@ public class RatingServiceImpl implements RatingService {
     public RatingResponse patchRating(int id, UpdateRatingRequest patchRating) {
         Rating rating = ratingRepository
                 .findById(id)
-                .orElseThrow(() -> new RatingNotFoundException("Rating with such id does not exist"));
+                .orElseThrow(() -> new RatingNotFoundException(id));
 
         if (patchRating.getUserId() > 0){
 

@@ -104,7 +104,7 @@ public class GlolbalExceptionHandler {
     @ExceptionHandler(RatingNotFoundException.class)
     public ResponseEntity<ApiResponse<String>> ratingNotFoundException(RatingNotFoundException ratingNotFoundException,
                                                                        Locale locale){
-        return generalResponse("error.rating.not.found", HttpStatus.NOT_FOUND, ratingNotFoundException, locale);
+        return generalResponse("error.rating.not.found", HttpStatus.NOT_FOUND, ratingNotFoundException, locale, ratingNotFoundException.getId());
     }
 
     @ExceptionHandler(RatingAlreadyExistsException.class)
