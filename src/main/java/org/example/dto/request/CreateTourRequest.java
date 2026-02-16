@@ -1,19 +1,18 @@
 package org.example.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+
 public class CreateTourRequest {
-    int id;
+    @NotBlank(message = "Tour name is required")
     private String name;
+
+    @NotNull(message = "Company id is required")
+    @Positive(message = "Company id must be positive value")
     private int companyId;
-    private int viewCount;
-
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    private int viewCount = 0;
 
     public String getName() {
         return name;
