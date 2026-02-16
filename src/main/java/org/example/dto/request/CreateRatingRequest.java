@@ -1,21 +1,23 @@
 package org.example.dto.request;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 public class CreateRatingRequest {
 
-    private int id;
-    private int tourId;
-    private int userId;
-    private int score;
+    @NotNull(message = "Company id is required")
+    @Positive(message = "Company id must be positive value")
+    private Integer tourId;
+    @NotNull(message = "User id is required")
+    @Positive(message = "User id must be positive value")
+    private Integer userId;
+    @NotNull(message = "Score is required")
+    @Positive(message = "Score must be positive")
+    private Integer score;
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
-    public int getTourId() {
+    public Integer getTourId() {
         return tourId;
     }
 
@@ -23,7 +25,7 @@ public class CreateRatingRequest {
         this.tourId = tourId;
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
@@ -31,7 +33,7 @@ public class CreateRatingRequest {
         this.userId = userId;
     }
 
-    public int getScore() {
+    public Integer getScore() {
         return score;
     }
 

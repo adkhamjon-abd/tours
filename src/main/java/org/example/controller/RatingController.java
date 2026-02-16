@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import jakarta.validation.Valid;
 import org.example.dto.request.CreateRatingRequest;
 import org.example.dto.request.UpdateRatingRequest;
 import org.example.dto.response.RatingResponse;
@@ -22,7 +23,7 @@ public class RatingController {
     }
 
     @PostMapping()
-    public ResponseEntity<ApiResponse<RatingResponse>> createRating(@RequestBody CreateRatingRequest rating) {
+    public ResponseEntity<ApiResponse<RatingResponse>> createRating(@RequestBody @Valid CreateRatingRequest rating) {
         RatingResponse newRating = ratingService.createRating(rating);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(newRating));
     }
