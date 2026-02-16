@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import jakarta.validation.Valid;
 import org.example.dto.UserDTO;
 import org.example.dto.request.CreateUserRequest;
 import org.example.dto.request.UpdateUserRequest;
@@ -25,7 +26,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<UserResponse>> createUser(@RequestBody CreateUserRequest userRequest) {
+    public ResponseEntity<ApiResponse<UserResponse>> createUser(@RequestBody @Valid CreateUserRequest userRequest) {
         UserResponse createdUser = userService.createUser(userRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(createdUser));
     }

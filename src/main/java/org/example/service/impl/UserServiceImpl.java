@@ -1,5 +1,6 @@
 package org.example.service.impl;
 
+import jakarta.validation.Valid;
 import org.example.dto.mapper.UserMapper;
 import org.example.dto.request.CreateUserRequest;
 import org.example.dto.request.UpdateUserRequest;
@@ -11,10 +12,12 @@ import org.example.repository.UserRepository;
 
 import org.example.service.abstractions.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
 @Service
+@Validated
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -25,7 +28,7 @@ public class UserServiceImpl implements UserService {
         this.userMapper = userMapper;
     }
 
-    public UserResponse createUser(CreateUserRequest userRequest) {
+    public UserResponse createUser(@Valid CreateUserRequest userRequest) {
         // Convert the request to entity
         User user = userMapper.toEntity(userRequest);
 
