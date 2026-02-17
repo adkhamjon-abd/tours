@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import jakarta.validation.Valid;
 import org.example.dto.request.CreateCompanyRequest;
 import org.example.dto.request.UpdateCompanyRequest;
 import org.example.dto.response.CompanyResponse;
@@ -28,7 +29,7 @@ public class CompanyController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<CompanyResponse>> createCompany(@RequestBody CreateCompanyRequest company) {
+    public ResponseEntity<ApiResponse<CompanyResponse>> createCompany(@RequestBody @Valid CreateCompanyRequest company) {
         CompanyResponse created = companyService.createCompany(company);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(created));
     }

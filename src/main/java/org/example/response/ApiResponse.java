@@ -13,6 +13,12 @@ public class ApiResponse<T> {
         this.data = data;
     }
 
+    public ApiResponse(T data, boolean success, String error) {
+        this.data = data;
+        this.success = success;
+        this.error = error;
+    }
+
     public ApiResponse(String error){
         this.success = false;
         this.error = error;

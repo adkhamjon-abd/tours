@@ -1,16 +1,11 @@
 package org.example.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class CreateCompanyRequest {
-    private int id;
+    @NotBlank(message = "Company name is required")
     private String name;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

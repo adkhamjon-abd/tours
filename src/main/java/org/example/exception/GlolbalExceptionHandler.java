@@ -5,11 +5,17 @@ import org.slf4j.Logger;
 import org.springframework.cglib.core.Local;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+
 import org.slf4j.LoggerFactory;
 
 @RestControllerAdvice
@@ -38,6 +44,24 @@ public class GlolbalExceptionHandler {
         ApiResponse<String> response = new ApiResponse<>(message);
         return ResponseEntity.status(httpStatus).body(response);
     }
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<Map<String, String>>> handleValidationExceptions(
+            MethodArgumentNotValidException ex) {
+
+        Map<String, String> errors = new HashMap<>();
+
+        ex.getBindingResult().getAllErrors().forEach(error -> {
+            String fieldName = ((FieldError) error).getField();
+            String message = error.getDefaultMessage();
+            errors.put(fieldName, message);
+        });
+
+
+        ApiResponse<Map<String, String>> response = new ApiResponse<>(errors, false, "Validation failed");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+
+    }
+
     @ExceptionHandler(BookingNotFoundException.class)
     public ResponseEntity<ApiResponse<String>> bookingNotFoundException(BookingNotFoundException bookingNotFoundException,
                                                                         Locale locale){
