@@ -1,17 +1,18 @@
 package org.example.dto.request;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 public class CreateBookingRequest {
-    private int id;
+
+    @NotNull(message = "User id is required")
+    @Positive(message = "User id must be greater than 0")
     private int userId;
+
+    @NotNull(message = "Tour id is required")
+    @Positive(message = "Tour id must be greater than 0")
     private int tourId;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public int getUserId() {
         return userId;

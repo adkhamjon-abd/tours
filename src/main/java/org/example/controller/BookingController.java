@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import jakarta.validation.Valid;
 import org.example.dto.request.CreateBookingRequest;
 import org.example.dto.request.UpdateBookingRequest;
 import org.example.model.Booking;
@@ -23,7 +24,7 @@ public class BookingController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<BookingResponse>> createBooking(@RequestBody CreateBookingRequest booking) {
+    public ResponseEntity<ApiResponse<BookingResponse>> createBooking(@RequestBody @Valid CreateBookingRequest booking) {
         BookingResponse createdBooking = bookingService.createBooking(booking);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(createdBooking));
     }
