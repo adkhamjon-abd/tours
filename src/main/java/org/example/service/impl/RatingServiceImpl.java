@@ -13,10 +13,12 @@ import org.example.repository.RatingRepository;
 import org.example.repository.TourRepository;
 import org.example.service.abstractions.RatingService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class RatingServiceImpl implements RatingService {
 
     private RatingRepository ratingRepository;
@@ -28,7 +30,7 @@ public class RatingServiceImpl implements RatingService {
         this.tourRepository = tourRepository;
         this.ratingMapper = ratingMapper;
     }
-
+    @Transactional(readOnly = true)
     private Double findAverageRatingByTourId(int id) {
         double totalScore = 0;
         double numberOfScores = 0;
@@ -42,7 +44,7 @@ public class RatingServiceImpl implements RatingService {
 
         return totalScore / numberOfScores;
     }
-
+    @Transactional
     public RatingResponse createRating(CreateRatingRequest createRatingRequest) {
         Rating rating = ratingMapper.toEntity(createRatingRequest);
 
@@ -58,14 +60,17 @@ public class RatingServiceImpl implements RatingService {
         return ratingMapper.toResponse(ratingRepository.save(rating));
     }
 
+    @Transactional(readOnly = true)
     public List<RatingResponse> getAll() {
         return ratingRepository.findAll().stream().map(ratingMapper::toResponse).toList();
     }
 
+    @Transactional(readOnly = true)
     public Double getAverageRatingByTourId(int id) {
         return findAverageRatingByTourId(id);
     }
 
+    @Transactional(readOnly = true)
     public RatingResponse getRatingById(int id) {
         Rating rating = ratingRepository
                 .findById(id)
@@ -73,7 +78,7 @@ public class RatingServiceImpl implements RatingService {
 
         return ratingMapper.toResponse(rating);
     }
-
+    @Transactional
     public void deleteRating(int id) {
         Rating rating = ratingRepository
                 .findById(id)
@@ -98,7 +103,7 @@ public class RatingServiceImpl implements RatingService {
         ratingRepository.update(rating);
         return ratingMapper.toResponse(rating);
     }
-
+    @Transactional
     public RatingResponse patchRating(int id, UpdateRatingRequest patchRating) {
         Rating rating = ratingRepository
                 .findById(id)

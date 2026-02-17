@@ -1,12 +1,11 @@
 package org.example.controller;
 
 import jakarta.validation.Valid;
-import org.example.dto.UserDTO;
 import org.example.dto.request.CreateUserRequest;
 import org.example.dto.request.UpdateUserRequest;
 import org.example.dto.response.UserResponse;
-import org.example.model.User;
 import org.example.response.ApiResponse;
+import org.example.service.abstractions.UserService;
 import org.example.service.impl.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +18,9 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
-    public UserController(UserServiceImpl userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 

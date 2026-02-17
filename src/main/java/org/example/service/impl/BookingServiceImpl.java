@@ -1,5 +1,6 @@
 package org.example.service.impl;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.example.dto.mapper.BookingMapper;
 import org.example.dto.response.BookingResponse;
 import org.example.dto.request.CreateBookingRequest;
@@ -33,7 +34,7 @@ public class BookingServiceImpl implements BookingService {
         this.bookingMapper = bookingMapper;
     }
 
-
+    @Transactional
     public BookingResponse createBooking(CreateBookingRequest createBookingRequest) {
 
         Booking booking = bookingMapper.toEntity(createBookingRequest);
@@ -62,6 +63,7 @@ public class BookingServiceImpl implements BookingService {
 
     }
 
+    @Transactional(readOnly = true)
     public BookingResponse getBooking(int id) {
         Booking booking = bookingRepository
                 .findById(id)
@@ -70,6 +72,7 @@ public class BookingServiceImpl implements BookingService {
         return bookingMapper.toResponse(booking);
     }
 
+    @Transactional(readOnly = true)
     public List<BookingResponse> getBookingByUserId(int id) {
         User user  = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
 
@@ -88,6 +91,7 @@ public class BookingServiceImpl implements BookingService {
         return bookings.stream().map(bookingMapper::toResponse).toList();
     }
 
+    @Transactional
     public void deleteBooking(int id) {
         Booking booking = bookingRepository
                 .findById(id)
@@ -95,6 +99,7 @@ public class BookingServiceImpl implements BookingService {
         bookingRepository.deleteById(id);
     }
 
+    @Transactional
     public BookingResponse updateBooking(int id, UpdateBookingRequest booking) {
         if (booking.getUserId() <= 0 || booking.getTourId() <= 0) {
             throw new InvalidBookingDataException("userId and tourId must be provided and > 0");
@@ -110,6 +115,7 @@ public class BookingServiceImpl implements BookingService {
         return bookingMapper.toResponse(existing);
     }
 
+    @Transactional
     public BookingResponse patchBooking(int id, UpdateBookingRequest updateBooking) {
 
 

@@ -6,6 +6,7 @@ import org.example.dto.request.UpdateRatingRequest;
 import org.example.dto.response.RatingResponse;
 import org.example.model.Rating;
 import org.example.response.ApiResponse;
+import org.example.service.abstractions.RatingService;
 import org.example.service.impl.RatingServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/ratings")
 public class RatingController {
-    private final RatingServiceImpl ratingService;
+    private final RatingService ratingService;
 
-    public RatingController(RatingServiceImpl ratingService) {
+    public RatingController(RatingService ratingService) {
         this.ratingService = ratingService;
     }
 

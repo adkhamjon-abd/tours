@@ -12,10 +12,12 @@ import org.example.repository.CompanyRepository;
 import org.example.repository.TourRepository;
 import org.example.service.abstractions.TourService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class TourServiceImpl implements TourService {
 
     private final TourRepository tourRepository;
@@ -27,7 +29,7 @@ public class TourServiceImpl implements TourService {
         this.companyRepository = companyRepository;
         this.tourMapper = tourMapper;
     }
-
+    @Transactional
     public TourResponse createTour(CreateTourRequest tourRequest) {
         Tour tour = tourMapper.toEntity(tourRequest);
         tourRepository.findById(tour.getId())
@@ -45,7 +47,7 @@ public class TourServiceImpl implements TourService {
         //companyid and id
         return tourMapper.toResponse(tourRepository.save(tour));
     }
-
+    @Transactional(readOnly = true)
     public TourResponse getById(int id) {
         Tour tour = tourRepository.findById(id).orElseThrow(() ->
                 new TourNotFoundException(id)
@@ -56,11 +58,13 @@ public class TourServiceImpl implements TourService {
         return tourMapper.toResponse(tour);
     }
 
+    @Transactional(readOnly = true)
     public List<TourResponse> getAll() {
         List<TourResponse> tours = tourRepository.findAll().stream().map(tourMapper::toResponse).toList();
         return tours;
     }
 
+    @Transactional
     public void deleteTour(int id) {
         tourRepository.findById(id).orElseThrow(() ->
                 new TourNotFoundException("Tour with such id does not exist")
@@ -68,6 +72,7 @@ public class TourServiceImpl implements TourService {
         tourRepository.deleteTourById(id);
     }
 
+    @Transactional
     public TourResponse updateTour(int id, UpdateTourRequest updateTour) {
         Tour tour = tourRepository.findById(id).orElseThrow(() ->
                 new TourNotFoundException("Tour with such id does not exist")
@@ -81,6 +86,7 @@ public class TourServiceImpl implements TourService {
         return tourMapper.toResponse(tour);
     }
 
+    @Transactional
     public TourResponse patchTour(int id, UpdateTourRequest updateTour) {
         Tour existingTour = tourRepository.findById(id).orElseThrow(() ->
                 new TourNotFoundException(id)

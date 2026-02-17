@@ -4,6 +4,7 @@ import org.example.dto.request.CreateTourRequest;
 import org.example.dto.request.UpdateTourRequest;
 import org.example.dto.response.TourResponse;
 import org.example.response.ApiResponse;
+import org.example.service.abstractions.TourService;
 import org.example.service.impl.TourServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +15,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/tours")
 public class TourController {
-    private final TourServiceImpl tourService;
+    private final TourService tourService;
 
-    public TourController(TourServiceImpl tourService) {
+    public TourController(TourService tourService) {
         this.tourService = tourService;
     }
 

@@ -12,12 +12,12 @@ import org.example.repository.UserRepository;
 
 import org.example.service.abstractions.UserService;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@Validated
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -28,6 +28,7 @@ public class UserServiceImpl implements UserService {
         this.userMapper = userMapper;
     }
 
+    @Transactional
     public UserResponse createUser(@Valid CreateUserRequest userRequest) {
         // Convert the request to entity
         User user = userMapper.toEntity(userRequest);
@@ -39,22 +40,26 @@ public class UserServiceImpl implements UserService {
         return userMapper.toResponse(userRepository.save(user));
     }
 
+    @Transactional(readOnly = true)
     public List<UserResponse> getAll() {
         return userRepository.findAll().stream().map(userMapper::toResponse).toList();
     }
 
+    @Transactional
     public void deleteUser(int id) {
         userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
 
         userRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
     public UserResponse getById(int id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
 
         return userMapper.toResponse(user);
     }
 
+    @Transactional
     public UserResponse updateUser(int id, UpdateUserRequest updateUserRequest) {
         // Convert request to entity
         User user = userMapper.toEntity(updateUserRequest);
@@ -67,6 +72,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.toResponse(existingUser);
     }
 
+    @Transactional
     public UserResponse patchUser(int id, UpdateUserRequest updateUserRequest) {
         // Convert request to entity
         User user = userMapper.toEntity(updateUserRequest);
